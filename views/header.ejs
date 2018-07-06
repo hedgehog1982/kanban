@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sent</title>
+    <link rel="stylesheet" href="/stylesheets/kanban.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  </head>
+  <body>
+  <div class="titleHeading" >
+    <h1 class="header-item">N-Brown Kanban</h1>
+    <p class="header-item">
+    User: 
+    <% if(user) { %>
+    	<%= user %> (<a href='/logout'>logout</a>)
+    <% } else { %>
+      Not logged in
+      <%= user %> (<a href='/login'>Login / Register</a>)
+    <% } %>
+    </div>
+

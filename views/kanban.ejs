@@ -1,0 +1,55 @@
+<% include header %>
+
+    <div id="kanban">
+        <div id="boards" class="boards">
+
+            <div id="addBoard" class="board">
+                <button class="boardButton" onclick="addCardOrBoard(this, 'board')">Add a Board </button>
+            </div>
+
+        </div>
+    </div>
+    <div id="modal" class="modal">
+        <div class="modal-box">
+            <button class="closeModal" id="closeModal">X</button>
+            <div class="modal-text">
+                <h1 id="modal-text">NAME OF CARD</h1>
+                <div id="belongsToBoard"></div>
+                <div id="dropDownBoard"></div>
+                <hr>
+                <h1>Description</h1>
+                <div id="modal-description">description</div>
+                <form>
+                    <h3>Comment:</h3>
+                    <input id="comment" type="text" minWidth="100%" name="lastname" value="">
+                    <br>
+                    <br>
+                    <input id="modal-submit" type="submit" value="Save">
+                </form>
+                <div id="comment-section">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+</body>
+
+
+    	<script>
+            const user = <%- JSON.stringify(user) %>;           
+         </script>
+
+
+<script src="/scripts/helper.js"></script>
+<script src="/scripts/modals.js"></script>
+<script src="/scripts/objectWrite.js"></script>
+<script src="/scripts/genDom.js"></script>
+<script src="/scripts/addCardorBoard.js"></script>
+<script src="/scripts/dragAndDrop.js"></script>
+<script src="/scripts/variables.js"></script>
+<script src="/scripts/socketIO.js"></script>
+
+</html>
