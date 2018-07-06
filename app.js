@@ -21,15 +21,15 @@ var io = require('socket.io')(http);
 //For SOCKET.io
 io.on('connection', function(socket){
   console.log('a user connected on ', socket.id);
-  io.emit("LOAD",{currentJSON, currentBoards, currentCards})
+  socket.emit("LOAD",{currentJSON, currentBoards, currentCards})
 
-  //on update
+  //on update but dont broadcast to sender as they already have the changes
   socket.on("CHANGE", function(msg){
     currentJSON = msg.kanbanStructure
     currentBoards = msg.kanbanBoards
     currentCards = msg.kanbanCards
     console.log(currentCards, currentBoards)
-    io.emit("LOAD",{currentJSON, currentBoards, currentCards})
+    socket.broadcast.emit("LOAD",{currentJSON, currentBoards, currentCards})
   });
 
 });

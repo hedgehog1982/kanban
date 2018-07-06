@@ -12,7 +12,7 @@ const generateNewBoardAfterUpdate = msg => {
 
     // for each board
     boards.forEach(board => {
-        var newBoard = createBoard(kanbanBoards[board].name, board);
+        var newBoard = createBoard(board);
         //find button in node to allow inserting before
         let buttonNode = '';
         for (let i = 0; i < newBoard.childNodes.length; i++) {
@@ -25,7 +25,6 @@ const generateNewBoardAfterUpdate = msg => {
         let cards = (kanbanBoards[board]['boards']);
         cards.forEach(card => {
             let newCard = createCard(
-                kanbanCards[card].name,
                 card
             );
             newBoard.insertBefore(newCard, buttonNode);

@@ -38,7 +38,7 @@ const addDetailToModal = id => {
 
     modalText.onclick = function() {
         let div = this;
-        renameBoard(div, id, renameTitle); //
+        renameBoard(div, id, renameTitle, "rename_card"); //
     };
 
     let modalDescription = document.getElementById('modal-description');

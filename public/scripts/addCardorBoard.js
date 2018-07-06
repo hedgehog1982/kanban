@@ -17,15 +17,15 @@ const addCardOrBoard = (tag, type) => {
         //add card or add board
 
         if (type === 'card' && textBox.value.length !== 0 && textBox.value.trim() !== '') {
-            var toAdd = createCard(textBox.value.trim(), id);
+           
             addCardToBoard(textBox.value.trim(), div.parentNode.id, id);
-
+            var toAdd = createCard(id);
             //insert Before add a card
             div.parentNode.insertBefore(toAdd, div);
             div.parentNode.replaceChild(tag, div);
         } else if (textBox.value.length !== 0 && textBox.value.trim() !== '') {
-            var toAdd = createBoard(textBox.value.trim(), id);
             addBoardToObject(textBox.value.trim(), id);
+            var toAdd = createBoard(id);
             document
                 .getElementById('boards')
                 .insertBefore(toAdd, document.getElementById('addBoard'));

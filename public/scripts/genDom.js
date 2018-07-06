@@ -36,9 +36,9 @@ const createComment = (commentObject, commentIndex, id) => {
 };
 
 //create card
-const createCard = (name, id) => {
+const createCard = (id) => {
     let div = creatElementWithAClass("div",['item'])
-    
+    div.innerHTML = kanbanCards[id]["name"]
     div.id = `${id}-card`;
     //div.classList.add('item');
     div.draggable = true;
@@ -64,7 +64,7 @@ const createCard = (name, id) => {
 
     let innerHTML = `${name} ${pageBreak} ${hasDescription}  &nbsp ${hasComments}`;
 
-    div.innerHTML = innerHTML;
+    //div.innerHTML = innerHTML;
     div.ondragstart = function() {
         drag(event);
     };
@@ -79,7 +79,7 @@ const createCard = (name, id) => {
 };
 
 //create a board
-const createBoard = (name, id) => {
+const createBoard = (id) => {
     //create board and add id and class
     let board = creatElementWithAClass('div',['board'])
     board.id = `${id}-board`;
@@ -88,7 +88,7 @@ const createBoard = (name, id) => {
     let headerContainer = creatElementWithAClass('div',['board-header'])
 
     let header = creatElementWithAClass('h2',['board-heading'])
-    header.innerHTML = name;
+    header.innerHTML = kanbanBoards[id]["name"];
 
     headerContainer.appendChild(header);
     headerContainer.appendChild(createDropDown("", '<i class="menu-button material-icons">apps</i>'))
@@ -129,6 +129,7 @@ const createBoard = (name, id) => {
 // Rename Board (and also description and title)
 
 const renameBoard = (div, id, funcToCall, type) => {
+    console.log("Renaming")
     let editTitle = document.createElement('textArea');
     text = div.innerHTML;
 
@@ -157,6 +158,11 @@ const renameBoard = (div, id, funcToCall, type) => {
         funcToCall(id, newName);
         div.innerHTML = newName.replace(/(?:\r\n|\r|\n)/g, '<br>');
         editTitle.parentNode.replaceChild(div, editTitle);
+        if (type === "rename_card"){
+            let cardId = document.getElementById(`${id}-card`)
+            cardId.innerHTML = editTitle.value.trim();
+            console.log("renaming a card")
+        }
     };
 
     //having to rename these so i can cancel them
@@ -180,11 +186,16 @@ const renameBoard = (div, id, funcToCall, type) => {
         }
     };
 
+    //if type is rename card this is being done through the modal and needs the div-id altering
+
+
     //event listeners
     //allow pressing of enter for description
     if (type !== 'allow empty') {
         editTitle.addEventListener('keypress', pressedEnter, false);
     }
+
+
     editTitle.addEventListener('focusout', lostFocus, false);
 };
 
