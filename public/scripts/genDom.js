@@ -94,15 +94,78 @@ const createBoard = id => {
     let header = creatElementWithAClass('h2', ['board-heading']);
     header.innerHTML = kanbanBoards[id]['name'];
 
-    let archiveButton = createButton("Archive Board")
+    let archiveButton = creatElementWithAClass('div', []);
+    archiveButton.id = `${id}-button`;
+    archiveButton.innerHTML = '<i class="material-icons">apps</i>';
     headerContainer.appendChild(header);
 
-    archiveButton.onclick = function() {
+
+    // menu in header 
+    let aNewMenu = creatElementWithAClass('div', ['menus']);
+        aNewMenu.id = 'board-menu';
+        aNewMenu.style.display = 'none';
+        aNewMenu.innerHTML = 'Menu Options';
+
+
+    let deleteButton = creatElementWithAClass('div', []);
+    deleteButton.innerHTML = "ARCHIVE BOARD"
+    deleteButton.onclick = function (){
         archiveBoard(id)
+        aNewMenu.remove()
     }
 
-    headerContainer.appendChild(archiveButton)
-    
+    aNewMenu.appendChild(deleteButton)
+
+    archiveButton.onclick = function() {
+        //check to see if
+        let oldMenus = document.getElementById('board-menu');
+               //if its the same button hide it 
+        if (oldMenus === aNewMenu) {
+            console.log('same button')
+            oldMenus.remove();
+        } else {
+            if (oldMenus !== null) {
+                oldMenus.remove();
+                aNewMenu.style.display = 'block';
+                document.body.appendChild(aNewMenu);
+            } else {
+                aNewMenu.style.display = 'block';
+                document.body.appendChild(aNewMenu);
+            }
+        }
+        let selectedButton = document.getElementById(`${id}-button`);
+
+        
+        //Make sure the menu is in the correct place // find out where the button is
+        aNewMenu.style.top =
+            selectedButton.getBoundingClientRect().bottom +
+            window.pageYOffset +
+            'px';
+        aNewMenu.style.left =
+            selectedButton.getBoundingClientRect().x +
+            window.pageXOffset +
+            'px';
+
+        
+    };
+    const removeMenu = (event) =>{
+        //e.preventDefault()
+        let oldMenus = document.getElementById('board-menu');
+        //if its the same button hide it 
+ if (oldMenus === aNewMenu) {
+     console.log('same button')
+     oldMenus.remove();
+ } 
+
+        console.log("moved ouit")
+    }
+    archiveButton.tabIndex= 0
+    archiveButton.addEventListener("focusout", removeMenu,true)
+
+    headerContainer.appendChild(archiveButton);
+
+    //end of menu in header
+
     //allow drag and drop onto header
     //allow drag and drop on board
     board.ondrop = () => drop(event);
@@ -133,6 +196,7 @@ const createBoard = id => {
     content.appendChild(button);
     board.appendChild(headerContainer);
     board.appendChild(content);
+
     return board;
 };
 
@@ -283,7 +347,7 @@ const createDropDown = (id, type) => {
             };
             dropDownDiv.appendChild(boardDiv);
         }
-    } 
+    }
 
     outerDiv.appendChild(button);
     outerDiv.appendChild(dropDownDiv);

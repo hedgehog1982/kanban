@@ -44,7 +44,6 @@
     justify-content: space-around;
     align-items: flex-start;
     position: relative;
-    flex-direction: column;
 
 }
 
@@ -207,4 +206,14 @@ button {
 
 .show {
     display: block;
+}
+
+.menus{
+    background-color: #f1f1f1;
+    position: absolute;
+    z-index : 40;
+}
+
+.menus div:hover {
+    background-color: #ddd;
 }
