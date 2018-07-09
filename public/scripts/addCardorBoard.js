@@ -16,20 +16,10 @@ const addCardOrBoard = (tag, type) => {
         let id = randomStringGenerator();
         //add card or add board
 
-        if (type === 'card' && textBox.value.length !== 0 && textBox.value.trim() !== '') {
-           
-            addCardToBoard(textBox.value.trim(), div.parentNode.id, id);
-            var toAdd = createCard(id);
-            //insert Before add a card
-            div.parentNode.insertBefore(toAdd, div);
-            div.parentNode.replaceChild(tag, div);
+        if (type === 'card' && textBox.value.length !== 0 && textBox.value.trim() !== '') {  
+            addCardToBoard(textBox.value.trim(), div.parentNode.id, id)
         } else if (textBox.value.length !== 0 && textBox.value.trim() !== '') {
             addBoardToObject(textBox.value.trim(), id);
-            var toAdd = createBoard(id);
-            document
-                .getElementById('boards')
-                .insertBefore(toAdd, document.getElementById('addBoard'));
-            div.parentNode.replaceChild(tag, div);
         }
 
     };
@@ -44,10 +34,9 @@ const addCardOrBoard = (tag, type) => {
     div.appendChild(addButton);
     div.appendChild(cancelButton);
 
- 
     //swap add button with newly created text box
     tag.parentNode.replaceChild(div, tag);
-    textBox.focus()
 
-    
+    //text box automatically editable
+    textBox.focus()
 };

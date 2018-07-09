@@ -36,19 +36,21 @@ const createComment = (commentObject, commentIndex, id) => {
 };
 
 //create card
-const createCard = (id) => {
-    let div = creatElementWithAClass("div",['item'])
-    div.innerHTML = kanbanCards[id]["name"]
+const createCard = id => {
+    let div = creatElementWithAClass('div', ['item']);
     div.id = `${id}-card`;
     //div.classList.add('item');
     div.draggable = true;
 
-    let hasDescription = "";
-    let hasComments = "";
-    let pageBreak = ""
+    let hasDescription = '';
+    let hasComments = '';
+    let pageBreak = '';
     if (kanbanCards[id] !== undefined) {
-        if (kanbanCards[id].comments.length !== 0 || kanbanCards[id].description.length !== 0){
-            pageBreak = `<br> <br>` 
+        if (
+            kanbanCards[id].comments.length !== 0 ||
+            kanbanCards[id].description.length !== 0
+        ) {
+            pageBreak = `<br> <br>`;
         }
         hasComments =
             kanbanCards[id].comments.length === 0
@@ -62,7 +64,9 @@ const createCard = (id) => {
                 : `&nbsp <i class="material-icons"> notes</i>`;
     }
 
-    let innerHTML = `${name} ${pageBreak} ${hasDescription}  &nbsp ${hasComments}`;
+    div.innerHTML = `${
+        kanbanCards[id]['name']
+    } ${pageBreak} ${hasDescription}  &nbsp ${hasComments}`;
 
     //div.innerHTML = innerHTML;
     div.ondragstart = function() {
@@ -79,20 +83,26 @@ const createCard = (id) => {
 };
 
 //create a board
-const createBoard = (id) => {
+const createBoard = id => {
     //create board and add id and class
-    let board = creatElementWithAClass('div',['board'])
+    let board = creatElementWithAClass('div', ['board']);
     board.id = `${id}-board`;
 
     //create headers
-    let headerContainer = creatElementWithAClass('div',['board-header'])
+    let headerContainer = creatElementWithAClass('div', ['board-header']);
 
-    let header = creatElementWithAClass('h2',['board-heading'])
-    header.innerHTML = kanbanBoards[id]["name"];
+    let header = creatElementWithAClass('h2', ['board-heading']);
+    header.innerHTML = kanbanBoards[id]['name'];
 
+    let archiveButton = createButton("Archive Board")
     headerContainer.appendChild(header);
-    headerContainer.appendChild(createDropDown("", '<i class="menu-button material-icons">apps</i>'))
 
+    archiveButton.onclick = function() {
+        archiveBoard(id)
+    }
+
+    headerContainer.appendChild(archiveButton)
+    
     //allow drag and drop onto header
     //allow drag and drop on board
     board.ondrop = () => drop(event);
@@ -109,7 +119,7 @@ const createBoard = (id) => {
     };
 
     //create content and add id
-    let content = creatElementWithAClass ("div", ['content'])
+    let content = creatElementWithAClass('div', ['content']);
     content.id = `${id}-content`;
 
     //create button
@@ -129,7 +139,7 @@ const createBoard = (id) => {
 // Rename Board (and also description and title)
 
 const renameBoard = (div, id, funcToCall, type) => {
-    console.log("Renaming")
+    console.log('Renaming');
     let editTitle = document.createElement('textArea');
     text = div.innerHTML;
 
@@ -158,11 +168,6 @@ const renameBoard = (div, id, funcToCall, type) => {
         funcToCall(id, newName);
         div.innerHTML = newName.replace(/(?:\r\n|\r|\n)/g, '<br>');
         editTitle.parentNode.replaceChild(div, editTitle);
-        if (type === "rename_card"){
-            let cardId = document.getElementById(`${id}-card`)
-            cardId.innerHTML = editTitle.value.trim();
-            console.log("renaming a card")
-        }
     };
 
     //having to rename these so i can cancel them
@@ -188,13 +193,11 @@ const renameBoard = (div, id, funcToCall, type) => {
 
     //if type is rename card this is being done through the modal and needs the div-id altering
 
-
     //event listeners
     //allow pressing of enter for description
     if (type !== 'allow empty') {
         editTitle.addEventListener('keypress', pressedEnter, false);
     }
-
 
     editTitle.addEventListener('focusout', lostFocus, false);
 };
@@ -202,10 +205,10 @@ const renameBoard = (div, id, funcToCall, type) => {
 const creatElementWithAClass = (type, classArray) => {
     let anElement = document.createElement(type);
     classArray.forEach(type => {
-        anElement.classList.add(type)
-    })
+        anElement.classList.add(type);
+    });
     return anElement;
-}
+};
 
 //------------------ DOM BUTTONS --------------------//
 //make a button to make things easier
@@ -216,7 +219,7 @@ const createButton = name => {
 };
 
 const createNewBoardButton = () => {
-    let div =creatElementWithAClass('div', ['board'])
+    let div = creatElementWithAClass('div', ['board']);
     div.id = 'addBoard';
 
     let button = createButton('Add a board');
@@ -233,9 +236,9 @@ const createNewBoardButton = () => {
 //-------------------- Drop Down --------------------//
 const createDropDown = (id, type) => {
     //
-    let outerDiv = creatElementWithAClass ('div', ['dropdown']) 
+    let outerDiv = creatElementWithAClass('div', ['dropdown']);
 
-    let dropDownDiv = creatElementWithAClass ('div', ['dropdown-content']) 
+    let dropDownDiv = creatElementWithAClass('div', ['dropdown-content']);
 
     let button = createButton(type);
     button.classList.add('dropBtn');
@@ -260,16 +263,16 @@ const createDropDown = (id, type) => {
             let boardDiv = document.createElement('a');
             boardDiv.innerHTML = kanbanBoards[board].name;
             boardDiv.onclick = () => {
-
                 hideButtons();
                 moveCardToNewBoard(id, board, 0);
+                redrawEverything();
                 addDetailToModal(id); //regenerate modal after change
             };
             dropDownDiv.appendChild(boardDiv);
         });
     } else if (type === 'Move Position') {
         let oldBoard = findCardsBoard(id);
-        let positions = kanbanBoards[oldBoard]['boards'].length
+        let positions = kanbanBoards[oldBoard]['boards'].length;
         for (let i = 0; i < positions; i++) {
             let boardDiv = document.createElement('a');
             boardDiv.innerHTML = `Move to ${i + 1}`;
@@ -280,7 +283,7 @@ const createDropDown = (id, type) => {
             };
             dropDownDiv.appendChild(boardDiv);
         }
-    }
+    } 
 
     outerDiv.appendChild(button);
     outerDiv.appendChild(dropDownDiv);

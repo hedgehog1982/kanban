@@ -8,10 +8,10 @@ var nodemailer = require('nodemailer');
 
 var dotenv = require('dotenv').config();
 
-var currentJSON = {} 
+//var currentJSON = {} 
 var currentBoards = {}
 var currentCards = {}
-var archivedCards = {}
+var archivedBoards = {}
 
 
 //for IO
@@ -21,15 +21,15 @@ var io = require('socket.io')(http);
 //For SOCKET.io
 io.on('connection', function(socket){
   console.log('a user connected on ', socket.id);
-  socket.emit("LOAD",{currentJSON, currentBoards, currentCards})
+  socket.emit("LOAD",{archivedBoards, currentBoards, currentCards})
 
   //on update but dont broadcast to sender as they already have the changes
   socket.on("CHANGE", function(msg){
-    currentJSON = msg.kanbanStructure
+    archivedBoards = msg.archivedBoards
     currentBoards = msg.kanbanBoards
     currentCards = msg.kanbanCards
     console.log(currentCards, currentBoards)
-    socket.broadcast.emit("LOAD",{currentJSON, currentBoards, currentCards})
+    socket.broadcast.emit("LOAD",{archivedBoards, currentBoards, currentCards})
   });
 
 });
@@ -45,7 +45,6 @@ var transporter = nodemailer.createTransport({
   });
 
 var passwordless = require('passwordless');
-//var passwordless = require('../../');
 
 var MongoStore = require('passwordless-mongostore');
 

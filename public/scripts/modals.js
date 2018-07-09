@@ -13,11 +13,9 @@ const displayModal = (board, id, cardObject) => {
 
 // add detail to modal -- will add to this bit heavily but not yet
 const addDetailToModal = id => {
+
     let title = kanbanCards[id].name;
-    let description =
-        kanbanCards[id].description === undefined
-            ? ''
-            : kanbanCards[id].description;
+    let description = kanbanCards[id].description;
 
     let comment = document.getElementById('comment');
     comment.value = '';
@@ -28,7 +26,6 @@ const addDetailToModal = id => {
     //section to do with boards
     let belongsToBoard = document.getElementById('belongsToBoard');
     belongsToBoard.innerHTML = `is on board : ${kanbanBoards[findCardsBoard(id)].name}`
-
 
     //------ FOR SWAPPING BOARD
     let dropDownButton = document.getElementById('dropDownBoard');
@@ -41,13 +38,17 @@ const addDetailToModal = id => {
         renameBoard(div, id, renameTitle, "rename_card"); //
     };
 
+
     let modalDescription = document.getElementById('modal-description');
+    if (modalDescription !== null) {
     //need carriage returns replaced with
     modalDescription.innerHTML = description.replace(/(?:\r\n|\r|\n)/g, '<br>');
     modalDescription.onclick = function() {
         let div = this;
         renameBoard(div, id, renameDescription, 'allow empty'); //
     };
+
+    }
 };
 
 //update comments below modal window
@@ -83,6 +84,7 @@ document
 //event listener to listen for save and action
 document.getElementById('modal-submit').addEventListener('click', () => {
     if (modalOpen.length !== 0) {
+        console.log("is this firing?")
         addComment(modalOpen);
     }
 });

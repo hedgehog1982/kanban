@@ -25,7 +25,7 @@ const drop = ev => {
         //make sure we update where it has changed to
         moveCardToNewBoard(data, ev.target.id);
 
-        ev.target.insertBefore(document.getElementById(data), buttonNode);
+       /* ev.target.insertBefore(document.getElementById(data), buttonNode);*/
     } else if (
         ev.target.className === 'item' ||
         ev.target.className === 'board-header' ||
@@ -44,10 +44,10 @@ const drop = ev => {
             let cards = targetNode.id.split("-")[0]
            index = kanbanBoards[board]["boards"].indexOf(cards)
         } 
-        parentDiv.insertBefore(
+        /*parentDiv.insertBefore(
             document.getElementById(data),
             targetNode.nextSibling
-        );
+        );  */
         moveCardToNewBoard(data, parentDiv.id, index);
     }
 };
