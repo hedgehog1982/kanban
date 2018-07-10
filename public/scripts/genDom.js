@@ -37,9 +37,7 @@ const createComment = (commentObject, commentIndex, id) => {
 
 //create card
 const createCard = id => {
-    let div = creatElementWithAClass('div', ['item']);
-    div.id = `${id}-card`;
-    //div.classList.add('item');
+    let div = creatElementWithAClass('div', ['item'], `${id}-card`);
     div.draggable = true;
 
     let hasDescription = '';
@@ -77,6 +75,7 @@ const createCard = id => {
     div.onclick = function() {
         let card = this.id.split('-')[0];
         let board = this.parentNode.id.split('-')[0];
+        killMenu()
         displayModal(board, card, kanbanCards[card]);
     };
     return div;
@@ -85,88 +84,21 @@ const createCard = id => {
 //create a board
 const createBoard = id => {
     //create board and add id and class
-    let board = creatElementWithAClass('div', ['board']);
-    board.id = `${id}-board`;
+    let board = creatElementWithAClass('div', ['board'],`${id}-board`);
 
     //create headers
     let headerContainer = creatElementWithAClass('div', ['board-header']);
 
     let header = creatElementWithAClass('h2', ['board-heading']);
     header.innerHTML = kanbanBoards[id]['name'];
-
-    let archiveButton = creatElementWithAClass('div', []);
-    archiveButton.id = `${id}-button`;
-    archiveButton.innerHTML = '<i class="material-icons">apps</i>';
     headerContainer.appendChild(header);
 
-    // menu in header
-    let aNewMenu = creatElementWithAClass('div', ['menus']);
-    aNewMenu.id = 'board-menu';
-    aNewMenu.style.display = 'none';
-    aNewMenu.innerHTML = 'Menu Options';
-
+    let archiveButton = makeABoardButton(id)
+    let boardMenu= makeABoardMenu(id)
     
+    boardMenu = makeAMenuPopOutOfTheButton(archiveButton, boardMenu);
 
-
-
-
-    let deleteButton = creatElementWithAClass('div', []);
-    deleteButton.innerHTML = 'ARCHIVE BOARD';
-    deleteButton.onclick = function() {
-        archiveBoard(id);
-        aNewMenu.remove();
-    };
-
-    aNewMenu.appendChild(deleteButton);
-
-    //const newMenu = (target, dropDown) => {
-        archiveButton.onclick = function() {
-            //check to see if
-            let oldMenus = document.getElementById('board-menu');
-            //if its the same button hide it
-            if (oldMenus === aNewMenu) {
-                console.log('same button');
-                oldMenus.remove();
-            } else {
-                if (oldMenus !== null) {
-                    oldMenus.remove();
-                    aNewMenu.style.display = 'block';
-                    document.body.appendChild(aNewMenu);
-                } else {
-                    aNewMenu.style.display = 'block';
-                    document.body.appendChild(aNewMenu);
-                }
-            }
-            let selectedButton = document.getElementById(`${id}-button`);
-
-            //Make sure the menu is in the correct place // find out where the button is
-            aNewMenu.style.top =
-                selectedButton.getBoundingClientRect().bottom +
-                window.pageYOffset +
-                'px';
-            aNewMenu.style.left =
-                selectedButton.getBoundingClientRect().x +
-                window.pageXOffset +
-                'px';
-        };
-        const removeMenu = event => {
-            //e.preventDefault()
-            let oldMenus = document.getElementById('board-menu');
-            //if its the same button hide it
-            if (oldMenus === aNewMenu) {
-                console.log('same button');
-                oldMenus.remove();
-            }
-
-            console.log('moved ouit');
-        };
-        archiveButton.tabIndex = 0;
-        archiveButton.addEventListener('focusout', removeMenu, true);
-
-        headerContainer.appendChild(archiveButton);
-    //};
-
-    //newMenu()
+    headerContainer.appendChild(boardMenu);
 
     //end of menu in header
 
@@ -186,8 +118,7 @@ const createBoard = id => {
     };
 
     //create content and add id
-    let content = creatElementWithAClass('div', ['content']);
-    content.id = `${id}-content`;
+    let content = creatElementWithAClass('div', ['content'],`${id}-content`);
 
     //create button
     let button = createButton('Add a Card');
@@ -197,7 +128,7 @@ const createBoard = id => {
 
     //add button to content
     //append all to board
-    
+
     board.appendChild(headerContainer);
     board.appendChild(content);
     board.appendChild(button);
@@ -271,11 +202,14 @@ const renameBoard = (div, id, funcToCall, type) => {
     editTitle.addEventListener('focusout', lostFocus, false);
 };
 
-const creatElementWithAClass = (type, classArray) => {
+const creatElementWithAClass = (type, classArray, id) => {
     let anElement = document.createElement(type);
     classArray.forEach(type => {
         anElement.classList.add(type);
     });
+    if (id !== null){
+        anElement.id = id
+    }
     return anElement;
 };
 
@@ -288,8 +222,7 @@ const createButton = name => {
 };
 
 const createNewBoardButton = () => {
-    let div = creatElementWithAClass('div', ['board']);
-    div.id = 'addBoard';
+    let div = creatElementWithAClass('div', ['board'],'addBoard');
 
     let button = createButton('Add a board');
 
@@ -303,59 +236,59 @@ const createNewBoardButton = () => {
 };
 
 //-------------------- Drop Down --------------------//
-const createDropDown = (id, type) => {
-    //
-    let outerDiv = creatElementWithAClass('div', ['dropdown']);
+// const createDropDown = (id, type) => {
+//     //
+//     let outerDiv = creatElementWithAClass('div', ['dropdown']);
 
-    let dropDownDiv = creatElementWithAClass('div', ['dropdown-content']);
+//     let dropDownDiv = creatElementWithAClass('div', ['dropdown-content']);
 
-    let button = createButton(type);
-    button.classList.add('dropBtn');
+//     let button = createButton(type);
+//     button.classList.add('dropBtn');
 
-    const hideButtons = () => {
-        console.log('clicked');
-        if (dropDownDiv.classList.contains('show')) {
-            dropDownDiv.classList.remove('show');
-        } else {
-            dropDownDiv.classList.add('show');
-        }
-    };
+//     const hideButtons = () => {
+//         console.log('clicked');
+//         if (dropDownDiv.classList.contains('show')) {
+//             dropDownDiv.classList.remove('show');
+//         } else {
+//             dropDownDiv.classList.add('show');
+//         }
+//     };
 
-    button.onclick = () => {
-        hideButtons();
-    };
+//     button.onclick = () => {
+//         hideButtons();
+//     };
 
-    //for moving new board
-    if (type === 'Move Board') {
-        let boards = Object.keys(kanbanBoards);
-        boards.forEach(board => {
-            let boardDiv = document.createElement('a');
-            boardDiv.innerHTML = kanbanBoards[board].name;
-            boardDiv.onclick = () => {
-                hideButtons();
-                moveCardToNewBoard(id, board, 0);
-                redrawEverything();
-                addDetailToModal(id); //regenerate modal after change
-            };
-            dropDownDiv.appendChild(boardDiv);
-        });
-    } else if (type === 'Move Position') {
-        let oldBoard = findCardsBoard(id);
-        let positions = kanbanBoards[oldBoard]['boards'].length;
-        for (let i = 0; i < positions; i++) {
-            let boardDiv = document.createElement('a');
-            boardDiv.innerHTML = `Move to ${i + 1}`;
-            boardDiv.onclick = () => {
-                hideButtons();
-                moveCardToNewBoard(id, oldBoard, i);
-                addDetailToModal(id); //regenerate modal after change
-            };
-            dropDownDiv.appendChild(boardDiv);
-        }
-    }
+//     //for moving new board
+//     if (type === 'Move Board') {
+//         let boards = Object.keys(kanbanBoards);
+//         boards.forEach(board => {
+//             let boardDiv = document.createElement('a');
+//             boardDiv.innerHTML = kanbanBoards[board].name;
+//             boardDiv.onclick = () => {
+//                 hideButtons();
+//                 moveCardToNewBoard(id, board, 0);
+//                 redrawEverything();
+//                 addDetailToModal(id); //regenerate modal after change
+//             };
+//             dropDownDiv.appendChild(boardDiv);
+//         });
+//     } else if (type === 'Move Position') {
+//         let oldBoard = findCardsBoard(id);
+//         let positions = kanbanBoards[oldBoard]['boards'].length;
+//         for (let i = 0; i < positions; i++) {
+//             let boardDiv = document.createElement('a');
+//             boardDiv.innerHTML = `Move to ${i + 1}`;
+//             boardDiv.onclick = () => {
+//                 hideButtons();
+//                 moveCardToNewBoard(id, oldBoard, i);
+//                 addDetailToModal(id); //regenerate modal after change
+//             };
+//             dropDownDiv.appendChild(boardDiv);
+//         }
+//     }
 
-    outerDiv.appendChild(button);
-    outerDiv.appendChild(dropDownDiv);
+//     outerDiv.appendChild(button);
+//     outerDiv.appendChild(dropDownDiv);
 
-    return outerDiv;
-};
+//     return outerDiv;
+// };

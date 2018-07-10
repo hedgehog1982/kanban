@@ -8,41 +8,48 @@ var nodemailer = require('nodemailer');
 
 var dotenv = require('dotenv').config();
 
-//var currentJSON = {} 
-var currentBoards = {}
-var currentCards = {}
-var archivedBoards = {}
+//var currentJSON = {}
+var currentBoards = {};
+var currentCards = {};
+var archivedBoards = {};
+var listOfUsers = {}
 
+module.exports = {listOfUsers}
 
 //for IO
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 //For SOCKET.io
-io.on('connection', function(socket){
-  console.log('a user connected on ', socket.id);
-  socket.emit("LOAD",{archivedBoards, currentBoards, currentCards})
+io.on('connection', function(socket) {
+    console.log('a user connected on ', socket.id)
 
-  //on update but dont broadcast to sender as they already have the changes
-  socket.on("CHANGE", function(msg){
-    archivedBoards = msg.archivedBoards
-    currentBoards = msg.kanbanBoards
-    currentCards = msg.kanbanCards
-    console.log(currentCards, currentBoards)
-    socket.broadcast.emit("LOAD",{archivedBoards, currentBoards, currentCards})
-  });
+    socket.emit('LOAD', { archivedBoards, currentBoards, currentCards, listOfUsers});
 
+    //on update but dont broadcast to sender as they already have the changes
+    socket.on('CHANGE', function(msg) {
+        archivedBoards = msg.archivedBoards;
+        currentBoards = msg.kanbanBoards;
+        currentCards = msg.kanbanCards;
+      
+        console.log(currentCards, currentBoards);
+        socket.broadcast.emit('LOAD', {
+            archivedBoards,
+            currentBoards,
+            currentCards,
+
+        });
+    });
 });
-
 
 //setup node mailer optiopns
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'black.bean.coffee.house01@gmail.com',
-      pass: process.env.EMAIL_KEY
+        user: 'black.bean.coffee.house01@gmail.com',
+        pass: process.env.EMAIL_KEY
     }
-  });
+});
 
 var passwordless = require('passwordless');
 
@@ -59,31 +66,27 @@ var host = 'http://localhost:3000/';
 
 // Setup of Passwordless
 passwordless.init(new MongoStore(pathToMongoDb));
-passwordless.addDelivery(
-    function(tokenToSend, uidToSend, recipient, callback) {
-        var host = 'localhost:3000';
-        var encoded = encodeURIComponent(uidToSend)
+passwordless.addDelivery(function(tokenToSend, uidToSend, recipient, callback) {
+    var host = 'localhost:3000';
+    var encoded = encodeURIComponent(uidToSend);
 
-        var mailOptions = {
-    from: "localhost:3000",
-    to: recipient,
-    subject: `Passwordless token` ,
-    text: `Hello!\nAccess your account here: http://${host}?token=${tokenToSend}&uid=${encoded}`
-  };
+    var mailOptions = {
+        from: 'localhost:3000',
+        to: recipient,
+        subject: `Passwordless token`,
+        text: `Hello!\nAccess your account here: http://${host}?token=${tokenToSend}&uid=${encoded}`
+    };
 
-  transporter.sendMail(mailOptions, function(error, info){
-    if (error) {
-        callback(error)
-      console.log(error);
-    } else {
-        callback(null)
-      console.log('Email sent: ' + info.response);
-    }
-  })
-
+    transporter.sendMail(mailOptions, function(error, info) {
+        if (error) {
+            callback(error);
+            console.log(error);
+        } else {
+            callback(null);
+            console.log('Email sent: ' + info.response);
+        }
+    });
 });
-
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -92,9 +95,11 @@ app.set('view engine', 'ejs');
 // Standard express setup
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(expressSession({secret: '42', saveUninitialized: false, resave: false}));
+app.use(
+    expressSession({ secret: '42', saveUninitialized: false, resave: false })
+);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Passwordless middleware
@@ -120,10 +125,9 @@ app.use(function(err, req, res, next) {
     });
 });
 
-
-http.listen(8080, "127.0.0.1")  //socket io listening
+http.listen(8080, '127.0.0.1'); //socket io listening
 app.set('port', process.env.PORT || 3000);
 
 var server = app.listen(app.get('port'), function() {
-  console.log('Express server listening on port ' + server.address().port);
+    console.log('Express server listening on port ' + server.address().port);
 });

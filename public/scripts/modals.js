@@ -21,7 +21,7 @@ const addDetailToModal = id => {
     comment.value = '';
 
     let modalText = document.getElementById('modal-text');
-    modalText.innerHTML = title;
+        modalText.innerHTML = title;
 
     //section to do with boards
     let belongsToBoard = document.getElementById('belongsToBoard');
@@ -30,14 +30,26 @@ const addDetailToModal = id => {
     //------ FOR SWAPPING BOARD
     let dropDownButton = document.getElementById('dropDownBoard');
     dropDownButton.innerHTML = '';
-    dropDownButton.appendChild(createDropDown(id, 'Move Board'));
-    dropDownButton.appendChild(createDropDown(id, 'Move Position'));
+
+
+    //make a move board button and menu
+    let moveBoardButton = creatElementWithAClass("div",["dropbtn"])
+    moveBoardButton.innerHTML = "Move Board"
+    let boardSelectionMenu = generateBoardSelectionMenu(id)
+    moveBoardButton = makeAMenuPopOutOfTheButton(moveBoardButton, boardSelectionMenu);
+    dropDownButton.appendChild(moveBoardButton)
+
+    // make a move position button 
+    let movePositionButton = creatElementWithAClass("div",["dropbtn"])
+    movePositionButton.innerHTML = "Move Position"
+    let positionsMenu = generateIndexPositionsMenu(id)
+    positionsMenu = makeAMenuPopOutOfTheButton(movePositionButton, positionsMenu)
+    dropDownButton.appendChild(movePositionButton)
 
     modalText.onclick = function() {
         let div = this;
         renameBoard(div, id, renameTitle, "rename_card"); //
     };
-
 
     let modalDescription = document.getElementById('modal-description');
     if (modalDescription !== null) {
@@ -66,6 +78,7 @@ const updateCommentDiv = id => {
 
 //Allow closing of modal
 document.getElementById('closeModal').addEventListener('click', () => {
+    killMenu()
     let modal = document.getElementById('modal');
     modal.style.display = 'none';
     modalOpen = ''; //set the fact that modal is shut

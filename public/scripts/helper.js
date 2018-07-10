@@ -37,3 +37,11 @@ const findCardsBoard = (id) => {
     })
     return oldBoard
 }
+
+// if menu is on screen remove it 
+const killMenu = () =>{
+    let menu = document.getElementById('board-menu')
+    if (menu !== null) {
+        menu.remove()
+    }
+}
