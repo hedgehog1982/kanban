@@ -26,36 +26,35 @@
     max-width: 250px;
     max-height: 80vh;
     margin-left: 10px;
-    background-color: grey;
+    background-color: rgba(0, 0, 0, 0.0);
     display: flex;
     flex-direction: column;
     align-self: flex-start;
-    overflow-y: auto;
-    overflow-x: hidden;
+
 }
 
 .board-header {
     width : 100%;
-    position: sticky;
-    top: 0;
-    height: 100%;
-    background-color: blue;
+    min-height: 40px;
+    height : 120%;
+    background-color: #62466B;
     display: flex;
     justify-content: space-around;
     align-items: flex-start;
-    position: relative;
-
+    border-radius: 6px;
+    flex-shrink: 0;
 }
 
 .board-heading{
     width : 200px;
 }
+
 .content {
-    margin-top: 10px;
-    position: sticky;
-    bottom: 0;
-    background-color: grey;
-    z-index: 2;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display : flex;
+    flex-direction: column;
+
 }
 
 textarea {
@@ -72,25 +71,34 @@ textarea {
     overflow-y: none;
     word-wrap: break-word;
 }
+
 h2 {
     word-wrap: break-word;
 }
+
 .item {
+    box-sizing: border-box;
     display: block;
-    width: 95%;
-    background-color: white;
+    width: 100%;
     align-self: center;
     border: 2px solid black;
-    margin: 2px;
+    margin: 4px;
     word-wrap: break-word;
-    overflow: none;
-    padding-top: 10px;
-    padding-bottom: 5px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left : 3px;
+    border-radius: 6px;
+    background-color: #B5C2B7;
 }
 
 button {
-    padding: 10px;
+    padding: 7px;
     width: 100%;
+    background-color: #8C93A8;
+    border-radius: 6px;
+    text-decoration: none;
+    border: none;
+    margin : 2px;
 }
 
 .modal {
@@ -216,4 +224,8 @@ button {
 
 .menus div:hover {
     background-color: #ddd;
+}
+
+i{
+    margin-top: 5px;
 }

@@ -25,11 +25,13 @@ const redrawEverything = () => {
 
         //add all cards to board, get keys and populate
         let cards = (kanbanBoards[board]['boards']);
+        console.log(newBoard.childNodes)
         cards.forEach(card => {
             let newCard = createCard(
                 card
             );
-            newBoard.insertBefore(newCard, buttonNode);
+            //newBoard.insertBefore(newCard, buttonNode);
+            newBoard.childNodes[1].appendChild(newCard)
         });
 
         //add populated board

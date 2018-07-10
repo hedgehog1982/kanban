@@ -16,16 +16,9 @@ const drop = ev => {
     //dropping onto another card will place it afer that card but before button
     //dropping it in gaps will put it at the end
     if (ev.target.className === 'content' || ev.target.className === 'board') {
-        let buttonNode = '';
-        for (let i = 0; i < ev.target.childNodes.length; i++) {
-            if ((ev.target.childNodes[i].localName = 'button')) {
-                buttonNode = ev.target.childNodes[i - 1]; //starts counting at 1?
-            }
-        }
-        //make sure we update where it has changed to
+
         moveCardToNewBoard(data, ev.target.id);
 
-       /* ev.target.insertBefore(document.getElementById(data), buttonNode);*/
     } else if (
         ev.target.className === 'item' ||
         ev.target.className === 'board-header' ||
@@ -44,10 +37,7 @@ const drop = ev => {
             let cards = targetNode.id.split("-")[0]
            index = kanbanBoards[board]["boards"].indexOf(cards)
         } 
-        /*parentDiv.insertBefore(
-            document.getElementById(data),
-            targetNode.nextSibling
-        );  */
+
         moveCardToNewBoard(data, parentDiv.id, index);
     }
 };

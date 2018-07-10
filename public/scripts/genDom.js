@@ -99,70 +99,74 @@ const createBoard = id => {
     archiveButton.innerHTML = '<i class="material-icons">apps</i>';
     headerContainer.appendChild(header);
 
-
-    // menu in header 
+    // menu in header
     let aNewMenu = creatElementWithAClass('div', ['menus']);
-        aNewMenu.id = 'board-menu';
-        aNewMenu.style.display = 'none';
-        aNewMenu.innerHTML = 'Menu Options';
+    aNewMenu.id = 'board-menu';
+    aNewMenu.style.display = 'none';
+    aNewMenu.innerHTML = 'Menu Options';
+
+    
+
+
 
 
     let deleteButton = creatElementWithAClass('div', []);
-    deleteButton.innerHTML = "ARCHIVE BOARD"
-    deleteButton.onclick = function (){
-        archiveBoard(id)
-        aNewMenu.remove()
-    }
-
-    aNewMenu.appendChild(deleteButton)
-
-    archiveButton.onclick = function() {
-        //check to see if
-        let oldMenus = document.getElementById('board-menu');
-               //if its the same button hide it 
-        if (oldMenus === aNewMenu) {
-            console.log('same button')
-            oldMenus.remove();
-        } else {
-            if (oldMenus !== null) {
-                oldMenus.remove();
-                aNewMenu.style.display = 'block';
-                document.body.appendChild(aNewMenu);
-            } else {
-                aNewMenu.style.display = 'block';
-                document.body.appendChild(aNewMenu);
-            }
-        }
-        let selectedButton = document.getElementById(`${id}-button`);
-
-        
-        //Make sure the menu is in the correct place // find out where the button is
-        aNewMenu.style.top =
-            selectedButton.getBoundingClientRect().bottom +
-            window.pageYOffset +
-            'px';
-        aNewMenu.style.left =
-            selectedButton.getBoundingClientRect().x +
-            window.pageXOffset +
-            'px';
-
-        
+    deleteButton.innerHTML = 'ARCHIVE BOARD';
+    deleteButton.onclick = function() {
+        archiveBoard(id);
+        aNewMenu.remove();
     };
-    const removeMenu = (event) =>{
-        //e.preventDefault()
-        let oldMenus = document.getElementById('board-menu');
-        //if its the same button hide it 
- if (oldMenus === aNewMenu) {
-     console.log('same button')
-     oldMenus.remove();
- } 
 
-        console.log("moved ouit")
-    }
-    archiveButton.tabIndex= 0
-    archiveButton.addEventListener("focusout", removeMenu,true)
+    aNewMenu.appendChild(deleteButton);
 
-    headerContainer.appendChild(archiveButton);
+    //const newMenu = (target, dropDown) => {
+        archiveButton.onclick = function() {
+            //check to see if
+            let oldMenus = document.getElementById('board-menu');
+            //if its the same button hide it
+            if (oldMenus === aNewMenu) {
+                console.log('same button');
+                oldMenus.remove();
+            } else {
+                if (oldMenus !== null) {
+                    oldMenus.remove();
+                    aNewMenu.style.display = 'block';
+                    document.body.appendChild(aNewMenu);
+                } else {
+                    aNewMenu.style.display = 'block';
+                    document.body.appendChild(aNewMenu);
+                }
+            }
+            let selectedButton = document.getElementById(`${id}-button`);
+
+            //Make sure the menu is in the correct place // find out where the button is
+            aNewMenu.style.top =
+                selectedButton.getBoundingClientRect().bottom +
+                window.pageYOffset +
+                'px';
+            aNewMenu.style.left =
+                selectedButton.getBoundingClientRect().x +
+                window.pageXOffset +
+                'px';
+        };
+        const removeMenu = event => {
+            //e.preventDefault()
+            let oldMenus = document.getElementById('board-menu');
+            //if its the same button hide it
+            if (oldMenus === aNewMenu) {
+                console.log('same button');
+                oldMenus.remove();
+            }
+
+            console.log('moved ouit');
+        };
+        archiveButton.tabIndex = 0;
+        archiveButton.addEventListener('focusout', removeMenu, true);
+
+        headerContainer.appendChild(archiveButton);
+    //};
+
+    //newMenu()
 
     //end of menu in header
 
@@ -193,9 +197,10 @@ const createBoard = id => {
 
     //add button to content
     //append all to board
-    content.appendChild(button);
+    
     board.appendChild(headerContainer);
     board.appendChild(content);
+    board.appendChild(button);
 
     return board;
 };
