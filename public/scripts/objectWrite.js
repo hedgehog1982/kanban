@@ -21,7 +21,8 @@ const addCardToBoard = (name, boardName, id) => {
         createdOn: new Date(),
         createdBy: user,
         description: '',
-        comments: []
+        comments: [],
+        users : []
     };
     redrawEverything();
     changeDonePushChange();
@@ -77,6 +78,17 @@ const addComment = (id) => {
     redrawEverything();
     changeDonePushChange();
 };
+
+const addUser = (id, user) => {
+    kanbanCards[id].users.push(user)
+    changeDonePushChange()
+}
+
+const removeUser = (id, user) => {
+    let indexOfUser = kanbanCards[id].users.indexOf(user)
+    kanbanCards[id].users.splice(indexOfUser, 1)
+    changeDonePushChange()
+}
 
 const archiveBoard = (id) => {
     console.log("archiving board ", kanbanBoards[id].name)

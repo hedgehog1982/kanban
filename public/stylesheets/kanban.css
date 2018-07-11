@@ -139,7 +139,7 @@ button {
     font-size: 12px;
     overflow-x: hidden;
     overflow-y: auto;
-    margin-left : 15px
+    margin-left : 15px;
     flex-grow : 1;
 }
 

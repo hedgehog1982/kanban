@@ -166,9 +166,9 @@ const renameBoard = (div, id, funcToCall, type) => {
 
     let renameAndReplaceDiv = () => {
         let newName = editTitle.value.trim();
-        funcToCall(id, newName);
         div.innerHTML = newName.replace(/(?:\r\n|\r|\n)/g, '<br>');
         editTitle.parentNode.replaceChild(div, editTitle);
+        funcToCall(id, newName);
     };
 
     //having to rename these so i can cancel them

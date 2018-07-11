@@ -28,7 +28,7 @@ const makeABoardMenu = id => {
 
 //-----------for making menu popout return menu button with event listeners----------------------//
 
-const makeAMenuPopOutOfTheButton = (menuButton, menu) => {
+const makeAMenuPopOutOfTheButton = (menuButton, menu, keepFocus) => {
     menu.id = 'board-menu';
     menuButton.onclick = function() {
         //check to see if
@@ -57,6 +57,7 @@ const makeAMenuPopOutOfTheButton = (menuButton, menu) => {
             menuButton.getBoundingClientRect().x + window.pageXOffset + 'px';
     };
 
+    if (keepFocus !== true) {
     // remove menu on focus out
     const removeMenu = () => {
         //e.preventDefault()
@@ -68,6 +69,7 @@ const makeAMenuPopOutOfTheButton = (menuButton, menu) => {
     };
     menu.tabIndex = 0;
     menu.addEventListener('focusout', removeMenu, true);
+    }
 
     //return menu button with event listener
     return menuButton;

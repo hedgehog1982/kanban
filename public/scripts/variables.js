@@ -2,7 +2,7 @@ let kanbanBoards = {}
 let kanbanCards = {}
 let archivedBoards = {}
 let archivedCards = {}
-let listOfUsers = {}
+let userList = {}
 let modalOpen = ""
 
 const socket = io('http://localhost:8080');

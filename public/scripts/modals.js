@@ -48,6 +48,14 @@ const addDetailToModal = id => {
     positionsMenu = makeAMenuPopOutOfTheButton(movePositionButton, positionsMenu)
     dropDownButton.appendChild(movePositionButton)
 
+    //add a user Button
+    let chooseUserButton = creatElementWithAClass("div",["dropbtn"])
+    chooseUserButton.innerHTML = "Add User"
+    let chooseUserMenu = generateUserMenu(id)
+    chooseUserMenu = makeAMenuPopOutOfTheButton(chooseUserButton, chooseUserMenu, true)
+    dropDownButton.appendChild(chooseUserButton)
+
+
     modalText.onclick = function() {
         let div = this;
         renameBoard(div, id, renameTitle, "rename_card"); //
