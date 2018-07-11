@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var expressSession = require('express-session');
 var bodyParser = require('body-parser');
 var nodemailer = require('nodemailer');
+const http2 = require('spdy');
+const fs = require('fs');
 
 var dotenv = require('dotenv').config();
 
@@ -74,7 +76,7 @@ passwordless.addDelivery(function(tokenToSend, uidToSend, recipient, callback) {
         from: 'localhost:3000',
         to: recipient,
         subject: `Passwordless token`,
-        text: `Hello!\nAccess your account here: http://${host}?token=${tokenToSend}&uid=${encoded}`
+        text: `Hello!\nAccess your account here: https://${host}?token=${tokenToSend}&uid=${encoded}`
     };
 
     transporter.sendMail(mailOptions, function(error, info) {
@@ -128,6 +130,12 @@ app.use(function(err, req, res, next) {
 http.listen(8080, '127.0.0.1'); //socket io listening
 app.set('port', process.env.PORT || 3000);
 
-var server = app.listen(app.get('port'), function() {
-    console.log('Express server listening on port ' + server.address().port);
-});
+
+const server = http2.createServer({
+    key: fs.readFileSync('localhost-privkey.pem'),
+    cert: fs.readFileSync('localhost-cert.pem')
+  },app).listen(3000)
+
+// var server = app.listen(app.get('port'), function() {
+//    console.log('Express server listening on port ' + server.address().port);
+// });

@@ -121,6 +121,7 @@ const createBoard = id => {
     let content = creatElementWithAClass('div', ['content'],`${id}-content`);
 
     //create button
+
     let button = createButton('Add a Card');
     button.onclick = function() {
         addCardOrBoard(this, 'card');
@@ -207,7 +208,7 @@ const creatElementWithAClass = (type, classArray, id) => {
     classArray.forEach(type => {
         anElement.classList.add(type);
     });
-    if (id !== null){
+    if (id !== undefined){
         anElement.id = id
     }
     return anElement;

@@ -21,7 +21,9 @@ const addDetailToModal = id => {
     comment.value = '';
 
     let modalText = document.getElementById('modal-text');
+    if (modalText !== undefined ){
         modalText.innerHTML = title;
+    }
 
     //section to do with boards
     let belongsToBoard = document.getElementById('belongsToBoard');
@@ -65,11 +67,19 @@ const addDetailToModal = id => {
 
 //update comments below modal window
 const updateCommentDiv = id => {
+    //clear text box
     let commentBox = document.getElementById('comment');
     commentBox.value = '';
 
-    //clear ready to generate
-    document.getElementById('comment-section').innerHTML = '';
+    //clear ready to generate reverse date order
+    let commentSection = document.getElementById('comment-section')
+    commentSection.innerHTML = '';
+    if (kanbanCards[id]['comments'].length !== 0){
+        document.getElementById('commentHeader').style.display = "block"
+    } else {
+        document.getElementById('commentHeader').style.display = "none"
+    }
+
     let reversedArray = kanbanCards[id]['comments'].reverse();
     reversedArray.forEach((comment, index) => {
         createComment(comment, index, id);

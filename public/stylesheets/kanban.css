@@ -1,19 +1,26 @@
-#kanban {
-    min-height: 95vh;
-    min-width: 95vw;
+body {
+    min-height : 96vh;
+    max-height : 96vh;
+    display : flex;
+    flex-direction: column;
 }
 
-
-.titleHeading{
+.titleHeading {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
     flex-flow: wrap;
-
+    flex-shrink: 0;
 }
 
-.header-item{
-    margin : 10px;
+#kanban {
+    min-width: 95vw;
+    flex-grow: 1;
+    display: flex;
+}
+
+.header-item {
+    margin: 10px;
 }
 
 .boards {
@@ -24,52 +31,37 @@
 .board {
     min-width: 250px;
     max-width: 250px;
-    max-height: 80vh;
+    flex-shrink : 0;
+    flex-grow : 1;
     margin-left: 10px;
-    background-color: rgba(0, 0, 0, 0.0);
+    background-color: rgba(0, 0, 0, 0);
     display: flex;
     flex-direction: column;
     align-self: flex-start;
-
 }
 
 .board-header {
-    width : 100%;
+    width: 100%;
     min-height: 40px;
-    height : 120%;
-    background-color: #62466B;
+    height: 120%;
+    background-color: #62466b;
     display: flex;
     justify-content: space-around;
     align-items: flex-start;
     border-radius: 6px;
-    flex-shrink: 0;
+    flex: 1 0 auto;
 }
 
-.board-heading{
-    width : 200px;
+.board-heading {
+    width: 200px;
 }
 
 .content {
     overflow-y: auto;
     overflow-x: hidden;
-    display : flex;
+    display: flex;
     flex-direction: column;
-
-}
-
-textarea {
-    margin-top: 17px;
-    width: 95%;
-    height: 100px;
-    margin-left: 0 auto;
-    margin-right: 0 auto;
-    border: 2px solid black;
-    font-size: 22px;
-    text-align: justify;
-    font-weight: bold;
-    resize: vertical;
-    overflow-y: none;
-    word-wrap: break-word;
+    flex: 0 1 auto;
 }
 
 h2 {
@@ -86,20 +78,20 @@ h2 {
     word-wrap: break-word;
     padding-top: 7px;
     padding-bottom: 7px;
-    padding-left : 3px;
+    padding-left: 3px;
     border-radius: 6px;
-    background-color: #B5C2B7;
+    background-color: #b5c2b7;
 }
 
 button {
     padding: 7px;
     width: 100%;
-    background-color: #8C93A8;
+    background-color: #8c93a8;
     border-radius: 6px;
     text-decoration: none;
     border: none;
-    margin : 2px;
-    flex-shrink: 0;
+    margin: 2px;
+    flex: 1 0 auto;
 }
 
 .modal {
@@ -117,20 +109,20 @@ button {
 }
 
 .modal-box {
+    display: flex;
+    padding : 20px;
+    flex-direction: row-reverse;
     border-radius: 20px;
     position: relative;
     border: 2px solid black;
-    min-width: 50vw;
-    min-height: 60vh;
-    width: 50vw;
-    height: 40vh;
+    min-width: 80vw;
+    min-height: 70vh;
     opacity: 1;
     background-color: white;
     box-shadow: 5px 10px;
 }
 
 .closeModal {
-    position: absolute;
     background-color: rgba(255, 0, 0, 0.527);
     width: 40px;
     height: 40px;
@@ -143,90 +135,17 @@ button {
 .modal-text {
     word-wrap: break-word;
     width: 80%;
-    position: absolute;
     height: 100%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     font-size: 12px;
+    overflow-x: hidden;
     overflow-y: auto;
-}
-
-.center-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-}
-
-#modal-description {
-    width: 100%;
-    min-height: 20px;
-    background-color: grey;
+    margin-left : 15px
+    flex-grow : 1;
 }
 
 #comment {
     min-width: 98%;
 }
-
-.dropbtn {
-    background-color: #3498db;
-    color: white;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    width : 45%;
-}
-
-.dropbtn:hover,
-.dropbtn:focus {
-    background-color: #2980b9;
-}
-
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.dropdown-content {
-    background-color: #f1f1f1;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 2;
-    max-width : 45%;
-    overflow : hidden;
-    text-overflow: ellipsis;
-}
-
-.dropdown-content:hover {
-    background-color: #ddd;
-}
-
-.show {
-    display: block;
-}
-
-.menus{
-    background-color: #f1f1f1;
-    position: absolute;
-    z-index : 40;
-}
-
-.menus div:hover {
-    background-color: #ddd;
-}
-
-i{
+i {
     margin-top: 5px;
-}
-
-#board-menu{
-    position : absolute;
-    z-index : 102;
-}
-
-#dropDownBoard{
-    display : flex;
 }

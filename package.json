@@ -11,12 +11,14 @@
     "dotenv": "^6.0.0",
     "ejs": "~2.3.1",
     "emailjs": "^0.3.16",
-    "express": "~4.12.4",
+    "express": "^4.12.4",
     "express-session": "^1.11.3",
+    "http2": "^3.3.7",
     "morgan": "~1.6.0",
     "nodemailer": "^4.6.7",
     "passwordless": "*",
     "passwordless-mongostore": "*",
-    "socket.io": "^2.1.1"
+    "socket.io": "^2.1.1",
+    "spdy": "^3.4.7"
   }
 }
