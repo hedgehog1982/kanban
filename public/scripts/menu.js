@@ -47,7 +47,7 @@ const makeAMenuPopOutOfTheButton = (menuButton, menu, keepFocus) => {
                 document.body.appendChild(menu);
             }
         }
-        console.log(menuButton.getBoundingClientRect());
+
         //Make sure the menu is in the correct place // find out where the button is
         menu.style.top =
             menuButton.getBoundingClientRect().bottom +

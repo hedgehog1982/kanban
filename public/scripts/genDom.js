@@ -6,8 +6,7 @@ const createComment = (commentObject, commentIndex, id) => {
     div.style.width = '100%';
 
     let commentsSection = document.getElementById('comment-section');
-    let hr = document.createElement('hr');
-    commentsSection.appendChild(hr);
+
 
     let comment = document.createElement('div');
     let date = new Date(commentObject.date);
@@ -33,6 +32,8 @@ const createComment = (commentObject, commentIndex, id) => {
     }
 
     commentsSection.appendChild(div);
+    let hr = document.createElement('hr');
+    commentsSection.appendChild(hr);
 };
 
 //create card
@@ -235,61 +236,3 @@ const createNewBoardButton = () => {
     div.appendChild(button);
     return div;
 };
-
-//-------------------- Drop Down --------------------//
-// const createDropDown = (id, type) => {
-//     //
-//     let outerDiv = creatElementWithAClass('div', ['dropdown']);
-
-//     let dropDownDiv = creatElementWithAClass('div', ['dropdown-content']);
-
-//     let button = createButton(type);
-//     button.classList.add('dropBtn');
-
-//     const hideButtons = () => {
-//         console.log('clicked');
-//         if (dropDownDiv.classList.contains('show')) {
-//             dropDownDiv.classList.remove('show');
-//         } else {
-//             dropDownDiv.classList.add('show');
-//         }
-//     };
-
-//     button.onclick = () => {
-//         hideButtons();
-//     };
-
-//     //for moving new board
-//     if (type === 'Move Board') {
-//         let boards = Object.keys(kanbanBoards);
-//         boards.forEach(board => {
-//             let boardDiv = document.createElement('a');
-//             boardDiv.innerHTML = kanbanBoards[board].name;
-//             boardDiv.onclick = () => {
-//                 hideButtons();
-//                 moveCardToNewBoard(id, board, 0);
-//                 redrawEverything();
-//                 addDetailToModal(id); //regenerate modal after change
-//             };
-//             dropDownDiv.appendChild(boardDiv);
-//         });
-//     } else if (type === 'Move Position') {
-//         let oldBoard = findCardsBoard(id);
-//         let positions = kanbanBoards[oldBoard]['boards'].length;
-//         for (let i = 0; i < positions; i++) {
-//             let boardDiv = document.createElement('a');
-//             boardDiv.innerHTML = `Move to ${i + 1}`;
-//             boardDiv.onclick = () => {
-//                 hideButtons();
-//                 moveCardToNewBoard(id, oldBoard, i);
-//                 addDetailToModal(id); //regenerate modal after change
-//             };
-//             dropDownDiv.appendChild(boardDiv);
-//         }
-//     }
-
-//     outerDiv.appendChild(button);
-//     outerDiv.appendChild(dropDownDiv);
-
-//     return outerDiv;
-// };
