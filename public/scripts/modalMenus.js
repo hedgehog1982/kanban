@@ -36,6 +36,7 @@ const generateIndexPositionsMenu = id => {
 //Make users menu
 const generateUserMenu = id => {
     let userMenu = creatElementWithAClass('div', ['dropdown']);
+    console.log(userList)
     let users = Object.keys(userList);
     users.forEach(user => {
         let boardUserItem = creatElementWithAClass('div', ['dropdown-content']);

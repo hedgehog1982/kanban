@@ -15,7 +15,7 @@ const randomStringGenerator = () => {
 
 //push change that we have done // may add what has changed and by who so
 const changeDonePushChange = () => {
-    socket.emit('CHANGE', {kanbanBoards, kanbanCards, archivedBoards});
+    socket.emit('CHANGE', {kanbanBoards, kanbanCards, archivedBoards, userList});
     return false;
 };
 

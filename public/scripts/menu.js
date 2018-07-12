@@ -30,7 +30,8 @@ const makeABoardMenu = id => {
 
 const makeAMenuPopOutOfTheButton = (menuButton, menu, keepFocus) => {
     menu.id = 'board-menu';
-    menuButton.onclick = function() {
+    menuButton.onclick = function(event) {
+        event.stopPropagation()
         //check to see if
         let oldMenus = document.getElementById('board-menu');
         //if its the same button hide it

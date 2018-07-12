@@ -7,7 +7,6 @@ const createComment = (commentObject, commentIndex, id) => {
 
     let commentsSection = document.getElementById('comment-section');
 
-
     let comment = document.createElement('div');
     let date = new Date(commentObject.date);
     let minutes = ('0' + date.getMinutes()).slice(-2); // for 2Dp
@@ -44,6 +43,8 @@ const createCard = id => {
     let hasDescription = '';
     let hasComments = '';
     let pageBreak = '';
+
+    //display comment and description icons
     if (kanbanCards[id] !== undefined) {
         if (
             kanbanCards[id].comments.length !== 0 ||
@@ -60,26 +61,56 @@ const createCard = id => {
         hasDescription =
             kanbanCards[id].description.length === 0
                 ? ''
-                : `&nbsp <i class="material-icons"> notes</i>`;
+                : `&nbsp <i class="material-icons">notes</i>`;
     }
 
-    div.innerHTML = `${
-        kanbanCards[id]['name']
-    } ${pageBreak} ${hasDescription}  &nbsp ${hasComments}`;
+    //display users 
+    let userDivIcons = creatElementWithAClass("div", [])
+    let usersAttachedToCard = kanbanCards[id].users
+        usersAttachedToCard.forEach(users => {
+            let userIconDiv = creatElementWithAClass("div", ["roundIcon"])
+            let wordArray = users.split(" ")
+            let firstLetters = ""
+               firstLetters += wordArray[0][0].toUpperCase()
+               if (wordArray.length > 2){
+                    firstLetters += wordArray[1][0].toUpperCase()
+               } 
+            console.log(firstLetters)
+            userIconDiv.innerHTML =firstLetters
+               //popout?
 
-    //div.innerHTML = innerHTML;
+               let chooseUserMenu = generateUserMenu(id)
+               chooseUserMenu = makeAMenuPopOutOfTheButton(userIconDiv, chooseUserMenu)
+              // dropDownButton.appendChild(chooseUserButton)
+
+
+            userDivIcons.appendChild(userIconDiv)
+        })
+        
+
+    //
+            //title of card
+            div.innerHTML = `${
+                kanbanCards[id]['name']
+            } ${pageBreak} ${hasDescription}  &nbsp ${hasComments}`;
+
+            div.appendChild(userDivIcons)
+
+
     div.ondragstart = function() {
         drag(event);
     };
 
     //on click - display modal
-    div.onclick = function() {
+    div.onclick = function(e) {
         let card = this.id.split('-')[0];
         let board = this.parentNode.id.split('-')[0];
         killMenu()
         displayModal(board, card, kanbanCards[card]);
     };
     return div;
+
+
 };
 
 //create a board

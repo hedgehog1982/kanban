@@ -81,12 +81,14 @@ const addComment = (id) => {
 
 const addUser = (id, user) => {
     kanbanCards[id].users.push(user)
+    redrawEverything();
     changeDonePushChange()
 }
 
 const removeUser = (id, user) => {
     let indexOfUser = kanbanCards[id].users.indexOf(user)
     kanbanCards[id].users.splice(indexOfUser, 1)
+    redrawEverything();
     changeDonePushChange()
 }
 

@@ -14,35 +14,14 @@ var dotenv = require('dotenv').config();
 var currentBoards = {};
 var currentCards = {};
 var archivedBoards = {};
-var listOfUsers = {}
+var userList = {}
 
-module.exports = {listOfUsers}
+module.exports = {userList}
 
 //for IO
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-//For SOCKET.io
-io.on('connection', function(socket) {
-    console.log('a user connected on ', socket.id)
-
-    socket.emit('LOAD', { archivedBoards, currentBoards, currentCards, listOfUsers});
-
-    //on update but dont broadcast to sender as they already have the changes
-    socket.on('CHANGE', function(msg) {
-        archivedBoards = msg.archivedBoards;
-        currentBoards = msg.kanbanBoards;
-        currentCards = msg.kanbanCards;
-      
-        console.log(currentCards, currentBoards);
-        socket.broadcast.emit('LOAD', {
-            archivedBoards,
-            currentBoards,
-            currentCards,
-
-        });
-    });
-});
 
 //setup node mailer optiopns
 var transporter = nodemailer.createTransport({
@@ -139,3 +118,37 @@ const server = http2.createServer({
 // var server = app.listen(app.get('port'), function() {
 //    console.log('Express server listening on port ' + server.address().port);
 // });
+
+//For SOCKET.io
+io.origins((origin, callback) => {
+    if (origin !== 'https://localhost:3000') {
+        console.log("not allowed")
+      return callback('origin not allowed', false);
+    }
+    callback(null, true);
+  });
+
+
+
+io.on('connection', function(socket) {
+    console.log('a user connected on ', socket.id)
+
+    socket.emit('LOAD', { archivedBoards, currentBoards, currentCards, userList});
+
+    //on update but dont broadcast to sender as they already have the changes
+    socket.on('CHANGE', function(msg) {
+        archivedBoards = msg.archivedBoards;
+        currentBoards = msg.kanbanBoards;
+        currentCards = msg.kanbanCards;
+        userList = msg.userList
+      
+        console.log(currentCards, currentBoards);
+        socket.broadcast.emit('LOAD', {
+            archivedBoards,
+            currentBoards,
+            currentCards,
+            userList
+
+        });
+    });
+});

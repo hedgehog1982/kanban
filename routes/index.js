@@ -15,12 +15,10 @@ router.get(
     '/kanban',
     passwordless.restricted({ failureRedirect: '/login' }),
     function(req, res) {
-			if (!(req.user in appFile.listOfUsers)){
-				appFile.listOfUsers[req.user] = {}
+			if (!(req.user in appFile.userList)){
+				appFile.userList[req.user] = {}
 			}
-
-				console.log(appFile.listOfUsers) 
-        res.render('kanban', { user: req.user });
+        res.render('kanban', { user: req.user});
     }
 );
 
