@@ -151,6 +151,7 @@ button {
     border-radius: 50%;
     justify-content: center;
     align-items: center;
+    margin : 2px;
 }
 
 #comment {
@@ -158,4 +159,9 @@ button {
 }
 i {
     margin-top: 5px;
+}
+
+.userList{
+    display : flex;
+
 }

@@ -65,7 +65,7 @@ const createCard = id => {
     }
 
     //display users 
-    let userDivIcons = creatElementWithAClass("div", [])
+    let userDivIcons = creatElementWithAClass("div", ["userList"])
     let usersAttachedToCard = kanbanCards[id].users
         usersAttachedToCard.forEach(users => {
             let userIconDiv = creatElementWithAClass("div", ["roundIcon"])
@@ -79,10 +79,10 @@ const createCard = id => {
             userIconDiv.innerHTML =firstLetters
                //popout?
 
-               let chooseUserMenu = generateUserMenu(id)
-               chooseUserMenu = makeAMenuPopOutOfTheButton(userIconDiv, chooseUserMenu)
-              // dropDownButton.appendChild(chooseUserButton)
+               let chooseUserMenu = checkBoxforUser (users , id)
 
+               chooseUserMenu = makeAMenuPopOutOfTheButton(userIconDiv, chooseUserMenu)
+               chooseUserMenu.style.display = "flex"
 
             userDivIcons.appendChild(userIconDiv)
         })

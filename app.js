@@ -148,7 +148,6 @@ io.on('connection', function(socket) {
             currentBoards,
             currentCards,
             userList
-
         });
     });
 });

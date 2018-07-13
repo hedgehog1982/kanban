@@ -39,6 +39,16 @@ const generateUserMenu = id => {
     console.log(userList)
     let users = Object.keys(userList);
     users.forEach(user => {
+         let boardUserItem = checkBoxforUser(user, id)
+        userMenu.appendChild(boardUserItem);
+    });
+
+    return userMenu;
+};
+
+//--------------------------- checkbox --------------------//
+const checkBoxforUser = (user , id) => {
+        //make a clickable checkbox
         let boardUserItem = creatElementWithAClass('div', ['dropdown-content']);
 
         //add checkbox
@@ -72,8 +82,5 @@ const generateUserMenu = id => {
 
         boardUserItem.appendChild(checkBox);
         boardUserItem.appendChild(boardUser);
-        userMenu.appendChild(boardUserItem);
-    });
-
-    return userMenu;
-};
+    return boardUserItem;
+}

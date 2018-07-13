@@ -6,7 +6,7 @@ const generateNewBoardAfterUpdate = msg => {
     archivedBoards = msg.archivedBoards
     kanbanBoards = msg.currentBoards
     kanbanCards = msg.currentCards
-    userList = msg.listOfUsers
+    userList = msg.userList
     redrawEverything()
 };
 
