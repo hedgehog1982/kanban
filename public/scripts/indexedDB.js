@@ -17,4 +17,33 @@ const employeeData = [
    { id: "00-02", name: "prasad", age: 32, email: "prasad@tutorialspoint.com" }
 ];
 var db;
-var request = window.indexedDB.open("newDatabase", 1);
+var request = window.indexedDB.open("newDatabase", 2);
+
+
+request.onerror = function(event) {
+    console.log("error: ");
+ };
+ 
+ request.onsuccess = function(event) {
+    db = request.result;
+    console.log("success: "+ db);
+ };
+
+ request.onupgradeneeded = function(event) {
+    var db = event.target.result;
+    var objectStore = db.createObjectStore("new", {keyPath: "id"});
+ }
+
+const writeAllToDB= () => {
+    console.log("write to DB", kanbanBoards)
+    var request = db.transaction(["new"], "readwrite")
+   .objectStore("new")
+   request.delete("kanbanBoards")
+   request.add({id : "kanbanBoards", items: kanbanBoards})
+
+    request = db.transaction(["new"], "readwrite")
+   .objectStore("new")
+   request.delete("kanbanCards")
+   request.add({id : "kanbanCards", items : kanbanCards})
+
+}
