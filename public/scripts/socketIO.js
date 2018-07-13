@@ -15,3 +15,7 @@ socket.on('LOAD', function(msg) {
     console.log('LOADING');
     generateNewBoardAfterUpdate(msg);
 });
+
+socket.on('reconnect_error', () => {
+    console.log('attempt to reconnect has failed woop woop');
+  });

@@ -1,4 +1,43 @@
-  <% include header %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="Description" content="Kanban Board with API calls">
+    <title>Kanban / API</title>
+    <link rel="stylesheet" href="/stylesheets/kanban.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/deferred.css" lazyload="1"/>
+    <link rel="manifest" href="/manifest.json">
+
+    <script>
+    //Add this below content to your HTML page, or add the js file to your page at the very top to register service worker
+  if (navigator.serviceWorker.controller) {
+  console.log('[PWA Builder] active service worker found, no need to register')
+  } else {
+  //Register the ServiceWorker
+  navigator.serviceWorker.register('pwabuilder-sw.js', {
+    scope: '/'
+  }).then(function(reg) {
+    console.log('Service worker has been registered for scope:'+ reg.scope);
+  });
+  }
+    </script>
+
+
+    </head>
+  <body>
+
+  <div class="titleHeading" >
+    <h1 class="header-item">N-Brown Kanban</h1>
+    <p class="header-item">
+    User: 
+    <% if(user) { %>
+    	<%= user %> (<a href='/logout'>logout</a>)
+    <% } else { %>
+      Not logged in
+      <%= user %> (<a href='/login'>Login / Register</a>)
+    <% } %>
+    </div>
   <% if(user) { %>
     <ul>
       <li>
@@ -6,7 +45,6 @@
       </li>
     </ul>
     <% } %>
-
-  
   </body>
+
 </html>

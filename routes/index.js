@@ -10,6 +10,10 @@ router.get('/', function(req, res) {
     res.render('index', { user: req.user });
 });
 
+router.get('/index.html', function(req, res) {
+    res.render('index', { user: req.user });
+});
+
 /*GET kanban page. */
 router.get(
     '/kanban',
