@@ -47,3 +47,13 @@ const writeAllToDB= () => {
    request.add({id : "kanbanCards", items : kanbanCards})
 
 }
+
+const readAllFromDB = () => {
+    objectStore.getAll().onsuccess = function(event) {
+        console.log(event)
+      };
+
+
+
+
+}

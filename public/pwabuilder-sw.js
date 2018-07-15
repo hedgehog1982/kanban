@@ -2,14 +2,19 @@
 
 //Install stage sets up the index page (home page) in the cache and opens a new cache
 self.addEventListener('install', function(event) {
-    var indexPage = new Request('./');  //
+    var indexPage = new Request('/index.html');  //
+    console.log(indexPage)
     event.waitUntil(
-      fetch(indexPage).then(function(response) {
+      fetch(indexPage,{
+        credentials: 'include'  
+      })
+      .then(function(response) {
         return caches.open('pwabuilder-offline').then(function(cache) {
           console.log('[PWA Builder] Cached index page during Install'+ response.url);
           return cache.put(indexPage, response);
-        });
-    }));
+        })
+        
+    }))
   });
   
   //If any fetch fails, it will look for the request in the cache and serve it from there first

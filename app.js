@@ -15,7 +15,6 @@ var currentBoards = {};
 var currentCards = {};
 var archivedBoards = {};
 var userList = {}
-
 module.exports = {userList}
 
 //for IO
