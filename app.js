@@ -42,16 +42,23 @@ var app = express();
 var pathToMongoDb = process.env.MONGODB_PATH;
 
 // TODO: Path to be send via email
-var host = 'http://localhost:3000/';
+var host = 'https://localhost:443/';
+
+// set up a route to redirect http to https
+var httpRedirect = require('http')
+httpRedirect.createServer(function (req, res) {
+    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+    res.end();
+}).listen(80);
 
 // Setup of Passwordless
 passwordless.init(new MongoStore(pathToMongoDb));
 passwordless.addDelivery(function(tokenToSend, uidToSend, recipient, callback) {
-    var host = 'localhost:3000';
+    var host = 'localhost';
     var encoded = encodeURIComponent(uidToSend);
 
     var mailOptions = {
-        from: 'localhost:3000',
+        from: 'localhost',
         to: recipient,
         subject: `Passwordless token`,
         text: `Hello!\nAccess your account here: https://${host}?token=${tokenToSend}&uid=${encoded}`
@@ -108,11 +115,10 @@ app.use(function(err, req, res, next) {
 http.listen(8080, '127.0.0.1'); //socket io listening
 app.set('port', process.env.PORT || 3000);
 
-
 const server = http2.createServer({
     key: fs.readFileSync('localhost-privkey.pem'),
     cert: fs.readFileSync('localhost-cert.pem')
-  },app).listen(3000)
+  },app).listen(443)
 
 // var server = app.listen(app.get('port'), function() {
 //    console.log('Express server listening on port ' + server.address().port);
@@ -120,7 +126,7 @@ const server = http2.createServer({
 
 //For SOCKET.io
 io.origins((origin, callback) => {
-    if (origin !== 'https://localhost:3000') {
+    if (origin !== 'https://localhost') {
         console.log("not allowed")
       return callback('origin not allowed', false);
     }

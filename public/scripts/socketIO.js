@@ -30,6 +30,6 @@ socket.on('LOAD', function(msg) {
 
 socket.on('reconnect_error', () => {
     console.log('attempt to reconnect has failed woop woop');
-    readAllFromDB()
+        readAllFromDB() //will only read locally if no variables set up
     // retrieve database from local storage
   });

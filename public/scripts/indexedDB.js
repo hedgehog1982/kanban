@@ -12,10 +12,6 @@ if (!window.indexedDB) {
    window.alert("Your browser doesn't support a stable version of IndexedDB.")
 }
 
-const employeeData = [
-   { id: "00-01", name: "gopal", age: 35, email: "gopal@tutorialspoint.com" },
-   { id: "00-02", name: "prasad", age: 32, email: "prasad@tutorialspoint.com" }
-];
 var db;
 var request = window.indexedDB.open("newDatabase", 2);
 
@@ -49,11 +45,18 @@ const writeAllToDB= () => {
 }
 
 const readAllFromDB = () => {
+    if (kanbanBoards.length === 0) {// no boards imported (new connection and server disconnected)
+    let transaction = db.transaction("new", 'readonly')
+    let objectStore = transaction.objectStore("new")
+    
+
+
     objectStore.getAll().onsuccess = function(event) {
-        console.log(event)
+        console.log(event.target)
+        kanbanBoards = event.target.result[0].items
+        kanbanCards = event.target.result[1].items
+        redrawEverything()
+        needToPullFromDBAsConnectionHasBeenLost = false
       };
-
-
-
-
+}
 }

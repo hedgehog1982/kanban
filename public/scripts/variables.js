@@ -5,8 +5,6 @@ let archivedCards = {}
 let userList = {}
 let modalOpen = ""
 
-
-
 const socket = io('http://localhost:8080');
 
 const redrawEverything = () => {
