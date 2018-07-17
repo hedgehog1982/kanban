@@ -45,16 +45,22 @@ const writeAllToDB= () => {
 }
 
 const readAllFromDB = () => {
-    if (kanbanBoards.length === 0) {// no boards imported (new connection and server disconnected)
+    function isEmpty( obj ) {
+        for ( var prop in obj ) { 
+          return false; 
+        } 
+        return true; 
+      }
+
+    if (isEmpty(kanbanBoards) ) {// no boards imported (new connection and server disconnected)
     let transaction = db.transaction("new", 'readonly')
     let objectStore = transaction.objectStore("new")
-    
-
 
     objectStore.getAll().onsuccess = function(event) {
         console.log(event.target)
         kanbanBoards = event.target.result[0].items
         kanbanCards = event.target.result[1].items
+        window.alert("Connection Lost - Changes will not be saved")
         redrawEverything()
         needToPullFromDBAsConnectionHasBeenLost = false
       };

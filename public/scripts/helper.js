@@ -20,6 +20,19 @@ const changeDonePushChange = () => {
     return false;
 };
 
+const changeDoneToBoardPushChange = (id) => {
+   // writeAllToDB()
+    socket.emit('boardChange', {id, data : kanbanBoards[id]});
+    return false;
+};
+
+const changeDoneToCardPushChange = (id) => {
+    // writeAllToDB()
+     socket.emit('cardChange', {id, data : kanbanCards[id]});
+     return false;
+ };
+
+
 const copyNodeStyle = (sourceNode, targetNode) => {
     const computedStyle = window.getComputedStyle(sourceNode);
     Array.from(computedStyle).forEach(key => targetNode.style.setProperty(key, computedStyle.getPropertyValue(key), computedStyle.getPropertyPriority(key)))

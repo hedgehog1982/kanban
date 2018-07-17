@@ -6,7 +6,8 @@ const addBoardToObject = (name, id) => {
     //for new way // adding last updated so eventually only pull whats needed
     kanbanBoards[id] = { name, boards: [], createdOn : new Date(), lastUpdated : new Date() };
     redrawEverything();
-    changeDonePushChange();
+    //changeDonePushChange();
+    changeDoneToBoardPushChange(id)
 };
 
 // add card to board in data structure
@@ -26,7 +27,10 @@ const addCardToBoard = (name, boardName, id) => {
         lastUpdated : new Date()
     };
     redrawEverything();
-    changeDonePushChange();
+    //changeDonePushChange();
+    changeDoneToCardPushChange(id)
+    changeDoneToBoardPushChange(nameOfBoard)
+
 };
 
 //card moved to new board
@@ -47,27 +51,32 @@ const moveCardToNewBoard = (cardName, newBoard, index) => {
         kanbanBoards[newBoard]['boards'].splice(index, 0, cardName);
     }
     redrawEverything();
-    changeDonePushChange();
+    changeDoneToBoardPushChange(oldBoard)
+    changeDoneToBoardPushChange(newBoard)
+    //changeDonePushChange();
 };
 
 const renameBoardOnObject = (id, name) => {
     kanbanBoards[id].name = name;
     kanbanBoards[id].lastUpdated = new Date()
-    changeDonePushChange();
+   // changeDonePushChange();
+    changeDoneToBoardPushChange(id)
 };
 
 const renameTitle = (id, name) => {
     kanbanCards[id].name = name;
     kanbanCards[id].lastUpdated = new Date()
     redrawEverything();
-    changeDonePushChange();
+    changeDoneToCardPushChange(id)
+    //changeDonePushChange();
 };
 
 const renameDescription = (id, description) => {
     kanbanCards[id].description = description;
     kanbanCards[id].lastUpdated = new Date()
     redrawEverything();
-    changeDonePushChange();
+    changeDoneToCardPushChange(id)
+    //changeDonePushChange();
 };
 
 const addComment = (id) => {
@@ -82,14 +91,16 @@ const addComment = (id) => {
     kanbanCards[id].lastUpdated = new Date()
     updateCommentDiv(id);
     redrawEverything();
-    changeDonePushChange();
+    changeDoneToCardPushChange(id)
+    //changeDonePushChange();
 };
 
 const addUser = (id, user) => {
     kanbanCards[id].lastUpdated = new Date()
     kanbanCards[id].users.push(user)
     redrawEverything();
-    changeDonePushChange()
+    changeDoneToCardPushChange(id)
+    //changeDonePushChange()
 }
 
 const removeUser = (id, user) => {
@@ -97,7 +108,8 @@ const removeUser = (id, user) => {
     let indexOfUser = kanbanCards[id].users.indexOf(user)
     kanbanCards[id].users.splice(indexOfUser, 1)
     redrawEverything();
-    changeDonePushChange()
+    changeDoneToCardPushChange(id)
+    //changeDonePushChange()
 }
 
 const archiveBoard = (id) => {

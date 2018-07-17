@@ -11,16 +11,15 @@ const fs = require('fs');
 var dotenv = require('dotenv').config();
 
 //var currentJSON = {}
-var currentBoards = {};
-var currentCards = {};
+var kanbanBoards = {};
+var kanbanCards = {};
 var archivedBoards = {};
-var userList = {}
-module.exports = {userList}
+var userList = {};
+module.exports = { userList };
 
 //for IO
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-
 
 //setup node mailer optiopns
 var transporter = nodemailer.createTransport({
@@ -45,11 +44,15 @@ var pathToMongoDb = process.env.MONGODB_PATH;
 var host = 'https://localhost:443/';
 
 // set up a route to redirect http to https
-var httpRedirect = require('http')
-httpRedirect.createServer(function (req, res) {
-    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-    res.end();
-}).listen(80);
+var httpRedirect = require('http');
+httpRedirect
+    .createServer(function(req, res) {
+        res.writeHead(301, {
+            Location: 'https://' + req.headers['host'] + req.url
+        });
+        res.end();
+    })
+    .listen(80);
 
 // Setup of Passwordless
 passwordless.init(new MongoStore(pathToMongoDb));
@@ -115,44 +118,67 @@ app.use(function(err, req, res, next) {
 http.listen(8080, '127.0.0.1'); //socket io listening
 app.set('port', process.env.PORT || 3000);
 
-const server = http2.createServer({
-    key: fs.readFileSync('localhost-privkey.pem'),
-    cert: fs.readFileSync('localhost-cert.pem')
-  },app).listen(443)
-
-// var server = app.listen(app.get('port'), function() {
-//    console.log('Express server listening on port ' + server.address().port);
-// });
+const server = http2
+    .createServer(
+        {
+            key: fs.readFileSync('localhost-privkey.pem'),
+            cert: fs.readFileSync('localhost-cert.pem')
+        },
+        app
+    )
+    .listen(443);
 
 //For SOCKET.io
 io.origins((origin, callback) => {
     if (origin !== 'https://localhost') {
-        console.log("not allowed")
-      return callback('origin not allowed', false);
+        console.log('not allowed');
+        return callback('origin not allowed', false);
     }
     callback(null, true);
-  });
-
-
+});
 
 io.on('connection', function(socket) {
-    console.log('a user connected on ', socket.id)
+    console.log('a user connected on ', socket.id);
 
-    socket.emit('LOAD', { archivedBoards, currentBoards, currentCards, userList});
+    socket.emit('LOAD', {
+        archivedBoards,
+        kanbanBoards,
+        kanbanCards,
+        userList
+    });
 
     //on update but dont broadcast to sender as they already have the changes
     socket.on('CHANGE', function(msg) {
         archivedBoards = msg.archivedBoards;
-        currentBoards = msg.kanbanBoards;
-        currentCards = msg.kanbanCards;
-        userList = msg.userList
-      
-        console.log(currentCards, currentBoards);
+        kanbanBoards = msg.kanbanBoards;
+        kanbanCards = msg.kanbanCards;
+        userList = msg.userList;
+
+        //console.log(currentCards, currentBoards);
         socket.broadcast.emit('LOAD', {
             archivedBoards,
-            currentBoards,
-            currentCards,
+            kanbanBoards,
+            kanbanCards,
             userList
         });
+    });
+
+    socket.on('boardChange', function(msg) {
+        console.log('board Change');
+        console.log(msg);
+        kanbanBoards[msg.id] = msg.data;
+        //just transmit the lot until I've fixed it
+        //console.log(currentCards, currentBoards);
+        socket.broadcast.emit('boardChange', msg);
+    });
+
+    socket.on('cardChange', function(msg) {
+        console.log('card Change');
+        console.log(msg);
+        kanbanCards[msg.id] = msg.data;
+
+        //just transmit the lot until I've fixed it
+        //console.log(currentCards, currentBoards);
+        socket.broadcast.emit('cardChange', msg);
     });
 });
