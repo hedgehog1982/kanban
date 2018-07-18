@@ -16,7 +16,7 @@ var kanbanBoards = {};
 var kanbanCards = {}
 var archivedBoards = {};
 var userList = {};
-module.exports = { userList, kanbanCards, kanbanBoards};
+module.exports = { userList, kanbanCards, kanbanBoards, userList};
 
 //for IO
 var http = require('http').Server(app);
@@ -38,6 +38,7 @@ var MongoStore = require('passwordless-mongostore');
 
 var routes = require('./routes/index');
 
+//setup of databases
 let DatabaseFile = require ("./dbs/index" )
 let db = DatabaseFile.db
 let saveCard = DatabaseFile.saveCard
@@ -45,7 +46,7 @@ let saveBoard = DatabaseFile.saveBoard
 
 var app = express();
 
-var pathToMongoDb = process.env.MONGODB_PATH + "passwordless-db";
+
 
 // TODO: Path to be send via email
 var host = 'https://localhost/';
@@ -62,6 +63,7 @@ httpRedirect
     .listen(80);
 
 // Setup of Passwordless
+var pathToMongoDb = process.env.MONGODB_PATH + "passwordless-db";
 passwordless.init(new MongoStore(pathToMongoDb));
 passwordless.addDelivery(function(tokenToSend, uidToSend, recipient, callback) {
     var host = 'localhost';

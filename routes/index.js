@@ -5,6 +5,11 @@ var passwordless = require('passwordless');
 
 var appFile = require('../app.js') // for accessing my variables
 
+//setup of databases
+let DatabaseFile = require ("../dbs/index" )
+let saveUser = DatabaseFile.saveUser
+
+
 /* GET home page. */
 router.get('/', function(req, res) {
     res.render('index', { user: req.user });
@@ -20,8 +25,10 @@ router.get(
     passwordless.restricted({ failureRedirect: '/login' }),
     function(req, res) {
 			if (!(req.user in appFile.userList)){
-				appFile.userList[req.user] = {}
-			}
+                appFile.userList[req.user] = {}
+                saveUser(req.user)
+            }
+            
         res.render('kanban', { user: req.user});
     }
 );

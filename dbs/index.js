@@ -12,6 +12,7 @@ db.once('open', function() {
   console.log("Connected")
   getAllCards();
   getAllBoards()
+  getAllUsers()
 });
 
 var cardSchema = new mongoose.Schema({
@@ -36,6 +37,11 @@ var boardSchema = new mongoose.Schema({
         boards : [String]
         }
     })
+
+    var userSchema = new mongoose.Schema({
+            email : String,
+            name : String
+        })
 
 
 let saveCard = (card) => {
@@ -80,6 +86,26 @@ let saveBoard = (board) => {
     )
 };
 
+let saveUser = (user, name) => {
+    let User = mongoose.model('User', userSchema)
+    var newUser = new User({email : user});
+
+    User.findOneAndUpdate(
+        {email : user},
+        newUser,
+        {upsert: true, new: true, runValidators: true}, // options
+        function (err, doc) { // callback
+            if (err) {
+                console.log("Error")
+                // handle error
+            } else {
+                console.log("Added User")
+                // handle document
+            }
+        }
+    )
+};
+
 let getAllCards = () => {
     let Card = mongoose.model('Card', cardSchema)
 
@@ -102,5 +128,18 @@ let getAllBoards = () => {
       });
 }
 
- module.exports = {db, saveCard, saveBoard};
+let getAllUsers = () => {
+    let User = mongoose.model('User', userSchema)
+
+    //find all cards
+    User.find({}, function(err, users) {
+         users.forEach(function(user) {
+
+            appFile.userList[user.email] = {}
+        });
+        console.log(appFile.userList)
+      });
+}
+
+ module.exports = {db, saveCard, saveBoard, saveUser};
 
