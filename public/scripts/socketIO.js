@@ -25,6 +25,7 @@ socket.on('LOAD', function(msg) {
     kanbanCards = msg.kanbanCards
     userList = msg.userList
     console.log('LOADING');
+    console.log(msg)
     generateNewBoardAfterUpdate(msg);
 });
 

@@ -1,3 +1,4 @@
+//socket.io really needs to be split
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
@@ -12,14 +13,15 @@ var dotenv = require('dotenv').config();
 
 //var currentJSON = {}
 var kanbanBoards = {};
-var kanbanCards = {};
+var kanbanCards = {}
 var archivedBoards = {};
 var userList = {};
-module.exports = { userList };
+module.exports = { userList, kanbanCards, kanbanBoards};
 
 //for IO
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+
 
 //setup node mailer optiopns
 var transporter = nodemailer.createTransport({
@@ -36,12 +38,17 @@ var MongoStore = require('passwordless-mongostore');
 
 var routes = require('./routes/index');
 
+let DatabaseFile = require ("./dbs/index" )
+let db = DatabaseFile.db
+let saveCard = DatabaseFile.saveCard
+let saveBoard = DatabaseFile.saveBoard
+
 var app = express();
 
-var pathToMongoDb = process.env.MONGODB_PATH;
+var pathToMongoDb = process.env.MONGODB_PATH + "passwordless-db";
 
 // TODO: Path to be send via email
-var host = 'https://localhost:443/';
+var host = 'https://localhost/';
 
 // set up a route to redirect http to https
 var httpRedirect = require('http');
@@ -139,6 +146,7 @@ io.origins((origin, callback) => {
 
 io.on('connection', function(socket) {
     console.log('a user connected on ', socket.id);
+    console.log(kanbanCards)
 
     socket.emit('LOAD', {
         archivedBoards,
@@ -170,15 +178,14 @@ io.on('connection', function(socket) {
         //just transmit the lot until I've fixed it
         //console.log(currentCards, currentBoards);
         socket.broadcast.emit('boardChange', msg);
+        saveBoard(msg)
     });
 
     socket.on('cardChange', function(msg) {
         console.log('card Change');
-        console.log(msg);
         kanbanCards[msg.id] = msg.data;
-
-        //just transmit the lot until I've fixed it
-        //console.log(currentCards, currentBoards);
         socket.broadcast.emit('cardChange', msg);
+        saveCard(msg)
+
     });
 });
