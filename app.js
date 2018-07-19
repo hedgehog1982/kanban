@@ -16,11 +16,10 @@ var kanbanBoards = {};
 var kanbanCards = {}
 var archivedBoards = {};
 var userList = {};
-module.exports = { userList, kanbanCards, kanbanBoards, userList};
+module.exports = { userList, kanbanCards, kanbanBoards, userList, archivedBoards};
 
 //for IO
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
 
 
 //setup node mailer optiopns
@@ -43,10 +42,10 @@ let DatabaseFile = require ("./dbs/index" )
 let db = DatabaseFile.db
 let saveCard = DatabaseFile.saveCard
 let saveBoard = DatabaseFile.saveBoard
+let deleteBoard = DatabaseFile.deleteBoard
+let archiveBoard = DatabaseFile.archiveBoard
 
 var app = express();
-
-
 
 // TODO: Path to be send via email
 var host = 'https://localhost/';
@@ -137,6 +136,8 @@ const server = http2
     )
     .listen(443);
 
+    var io = require('socket.io')(http);    
+
 //For SOCKET.io
 io.origins((origin, callback) => {
     if (origin !== 'https://localhost') {
@@ -148,7 +149,7 @@ io.origins((origin, callback) => {
 
 io.on('connection', function(socket) {
     console.log('a user connected on ', socket.id);
-    console.log(kanbanCards)
+   // console.log(kanbanCards)
 
     socket.emit('LOAD', {
         archivedBoards,
@@ -175,7 +176,7 @@ io.on('connection', function(socket) {
 
     socket.on('boardChange', function(msg) {
         console.log('board Change');
-        console.log(msg);
+        //console.log(msg);
         kanbanBoards[msg.id] = msg.data;
         //just transmit the lot until I've fixed it
         //console.log(currentCards, currentBoards);
@@ -188,6 +189,21 @@ io.on('connection', function(socket) {
         kanbanCards[msg.id] = msg.data;
         socket.broadcast.emit('cardChange', msg);
         saveCard(msg)
+    });
+
+    socket.on('boardArchived', function(msg) {
+        console.log('Board Archived');
+        //move board to archive
+        archivedBoards[msg.id] = msg.data
+        //transmit message to archive board
+        socket.broadcast.emit('boardArchived', msg);
+        //Add archived Board
+        archiveBoard(msg)
+        //Delete from DB
+        deleteBoard(msg)
+        //delete board - should really only do this on success to Database?
+        delete kanbanBoards[msg.id]
+        //Write to DB
 
     });
 });

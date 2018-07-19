@@ -115,7 +115,8 @@ const removeUser = (id, user) => {
 const archiveBoard = (id) => {
     console.log("archiving board ", kanbanBoards[id].name)
     archivedBoards[id] = kanbanBoards[id]
+    boardHasBeenArchived(id)
     delete kanbanBoards[id]
-    changeDonePushChange();
+    //changeDonePushChange();
     redrawEverything();
 }

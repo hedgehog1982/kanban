@@ -7,7 +7,7 @@ const makeABoardButton = id => {
 };
 
 //---------------------- board menu ---------------------------//
-const makeABoardMenu = id => {
+const makeABoardMenu = (id ) => {
     //----------------------------- menu --------------------------//
     // menu header
     let aNewMenu = creatElementWithAClass('div', ['menus']);
@@ -19,7 +19,7 @@ const makeABoardMenu = id => {
     deleteButton.innerHTML = 'ARCHIVE BOARD';
     deleteButton.onclick = function() {
         archiveBoard(id);
-        aNewMenu.remove();
+         aNewMenu.remove()
     };
 
     aNewMenu.appendChild(deleteButton);

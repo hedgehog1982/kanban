@@ -26,7 +26,6 @@ const redrawEverything = () => {
 
         //add all cards to board, get keys and populate
         let cards = (kanbanBoards[board]['boards']);
-        console.log(newBoard.childNodes)
         cards.forEach(card => {
             let newCard = createCard(
                 card
@@ -39,7 +38,10 @@ const redrawEverything = () => {
         document.getElementById('boards').appendChild(newBoard);
     });
 
-    document.getElementById('boards').appendChild(createNewBoardButton());
+    //add new board button and etrieve archive boards button
+
+    document.getElementById('boards').appendChild(createNewBoardAndRetrieveButton());
+   //document.getElementById('boards').appendChild(retrieveBoardButton());
     //kanbanStructure = JSON.parse(JSON.stringify(newKanbanStructure));
 
     if (modalOpen.length !== 0){

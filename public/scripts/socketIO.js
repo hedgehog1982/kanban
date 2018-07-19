@@ -2,7 +2,6 @@
 
 // update has happened on the board (server pulled new content or another user has updateed)
 const generateNewBoardAfterUpdate = msg => {
-    console.log(msg)
     redrawEverything()
     //store to local database
     writeAllToDB()
@@ -25,13 +24,12 @@ socket.on('LOAD', function(msg) {
     kanbanCards = msg.kanbanCards
     userList = msg.userList
     console.log('LOADING');
-    console.log(msg)
     generateNewBoardAfterUpdate(msg);
 });
 
 //load - card Change
 socket.on('cardChange', function(msg) {
-    console.log('card LOADING', msg);
+    console.log('card LOADING');
     kanbanCards[msg.id] = msg.data;
     generateNewBoardAfterUpdate(msg);
 });
@@ -40,6 +38,14 @@ socket.on('cardChange', function(msg) {
 socket.on('boardChange', function(msg) {
     console.log('board LOADING');
     kanbanBoards[msg.id] = msg.data;
+    generateNewBoardAfterUpdate(msg);
+});
+
+//load - board Chnage
+socket.on('boardArchived', function(msg) {
+    console.log('board Archived');
+    archivedBoards[msg.id] = msg.data;
+    delete kanbanBoards[msg.id]
     generateNewBoardAfterUpdate(msg);
 });
 

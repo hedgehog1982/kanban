@@ -1,6 +1,5 @@
 // ----------------- Generate DOM objects           ----------------------//
 //create comment
-
 const createComment = (commentObject, commentIndex, id) => {
     let div = document.createElement('div');
     div.style.width = '100%';
@@ -64,38 +63,38 @@ const createCard = id => {
                 : `&nbsp <i class="material-icons">notes</i>`;
     }
 
-    //display users 
-    let userDivIcons = creatElementWithAClass("div", ["userList"])
-    let usersAttachedToCard = kanbanCards[id].users
-        usersAttachedToCard.forEach(users => {
-            let userIconDiv = creatElementWithAClass("div", ["roundIcon"])
-            let wordArray = users.split(" ")
-            let firstLetters = ""
-               firstLetters += wordArray[0][0].toUpperCase()
-               if (wordArray.length > 2){
-                    firstLetters += wordArray[1][0].toUpperCase()
-               } 
-            console.log(firstLetters)
-            userIconDiv.innerHTML =firstLetters
-               //popout?
+    //display users
+    let userDivIcons = creatElementWithAClass('div', ['userList']);
+    let usersAttachedToCard = kanbanCards[id].users;
+    usersAttachedToCard.forEach(users => {
+        let userIconDiv = creatElementWithAClass('div', ['roundIcon']);
+        let wordArray = users.split(' ');
+        let firstLetters = '';
+        firstLetters += wordArray[0][0].toUpperCase();
+        if (wordArray.length > 2) {
+            firstLetters += wordArray[1][0].toUpperCase();
+        }
+        console.log(firstLetters);
+        userIconDiv.innerHTML = firstLetters;
+        //popout?
 
-               let chooseUserMenu = checkBoxforUser (users , id)
+        let chooseUserMenu = checkBoxforUser(users, id);
 
-               chooseUserMenu = makeAMenuPopOutOfTheButton(userIconDiv, chooseUserMenu)
-               chooseUserMenu.style.display = "flex"
+        chooseUserMenu = makeAMenuPopOutOfTheButton(
+            userIconDiv,
+            chooseUserMenu
+        );
+        chooseUserMenu.style.display = 'flex';
 
-            userDivIcons.appendChild(userIconDiv)
-        })
-        
+        userDivIcons.appendChild(userIconDiv);
+    });
 
-    //
-            //title of card
-            div.innerHTML = `${
-                kanbanCards[id]['name']
-            } ${pageBreak} ${hasDescription}  &nbsp ${hasComments}`;
+    //title of card
+    div.innerHTML = `${
+        kanbanCards[id]['name']
+    } ${pageBreak} ${hasDescription}  &nbsp ${hasComments}`;
 
-            div.appendChild(userDivIcons)
-
+    div.appendChild(userDivIcons);
 
     div.ondragstart = function() {
         drag(event);
@@ -105,18 +104,16 @@ const createCard = id => {
     div.onclick = function(e) {
         let card = this.id.split('-')[0];
         let board = this.parentNode.id.split('-')[0];
-        killMenu()
+        killMenu();
         displayModal(board, card, kanbanCards[card]);
     };
     return div;
-
-
 };
 
 //create a board
 const createBoard = id => {
     //create board and add id and class
-    let board = creatElementWithAClass('div', ['board'],`${id}-board`);
+    let board = creatElementWithAClass('div', ['board'], `${id}-board`);
 
     //create headers
     let headerContainer = creatElementWithAClass('div', ['board-header']);
@@ -125,10 +122,11 @@ const createBoard = id => {
     header.innerHTML = kanbanBoards[id]['name'];
     headerContainer.appendChild(header);
 
-    let archiveButton = makeABoardButton(id)
-    let boardMenu= makeABoardMenu(id)
-    
-    boardMenu = makeAMenuPopOutOfTheButton(archiveButton, boardMenu);
+    let archiveButton = makeABoardButton(id);
+    let boardMenu = makeABoardMenu(id);
+
+    //add focus out true to allow removal
+    boardMenu = makeAMenuPopOutOfTheButton(archiveButton, boardMenu, true);
 
     headerContainer.appendChild(boardMenu);
 
@@ -150,7 +148,7 @@ const createBoard = id => {
     };
 
     //create content and add id
-    let content = creatElementWithAClass('div', ['content'],`${id}-content`);
+    let content = creatElementWithAClass('div', ['content'], `${id}-content`);
 
     //create button
 
@@ -161,7 +159,6 @@ const createBoard = id => {
 
     //add button to content
     //append all to board
-
     board.appendChild(headerContainer);
     board.appendChild(content);
     board.appendChild(button);
@@ -177,7 +174,7 @@ const renameBoard = (div, id, funcToCall, type) => {
     text = div.innerHTML;
 
     editTitle.innerHTML = text.replace(/<br\s*[\/]?>/gi, '\n');
-    copyNodeStyle(div, editTitle); //copy style to other node
+    copyNodeStyle(div, editTitle); //copy style to other node so it matches exactly
 
     editTitle.style.overflowY = 'hidden';
 
@@ -192,7 +189,6 @@ const renameBoard = (div, id, funcToCall, type) => {
     );
 
     //copy style from previous ?
-
     div.parentNode.replaceChild(editTitle, div);
     editTitle.focus();
 
@@ -214,6 +210,7 @@ const renameBoard = (div, id, funcToCall, type) => {
         }
     };
 
+    //If lost focus swap div back
     let lostFocus = e => {
         e.preventDefault();
         editTitle.removeEventListener('keypress', pressedEnter);
@@ -240,8 +237,8 @@ const creatElementWithAClass = (type, classArray, id) => {
     classArray.forEach(type => {
         anElement.classList.add(type);
     });
-    if (id !== undefined){
-        anElement.id = id
+    if (id !== undefined) {
+        anElement.id = id;
     }
     return anElement;
 };
@@ -254,16 +251,25 @@ const createButton = name => {
     return button;
 };
 
-const createNewBoardButton = () => {
-    let div = creatElementWithAClass('div', ['board'],'addBoard');
+const createNewBoardAndRetrieveButton = () => {
+    let div = creatElementWithAClass('div', ['board'], 'addBoard');
 
+    //add a new board button
     let button = createButton('Add a board');
-
     button.onclick = function() {
         addCardOrBoard(this, 'board');
     };
-
     button.classList.add('boardButton');
     div.appendChild(button);
+
+    //add retrieve button
+    let retrieveButton = createButton('Retrieve A Board');
+    retrieveButton.onclick = function() {
+        console.log('DUMMY - RETRIEVE BOARD');
+        //need some sort of retriavable list
+    };
+    retrieveButton.classList.add('boardButton');
+    div.appendChild(retrieveButton);
+
     return div;
 };

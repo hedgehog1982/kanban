@@ -33,14 +33,14 @@ router.get(
     }
 );
 
-/* GET restricted site. */
-router.get(
-    '/restricted',
-    passwordless.restricted({ failureRedirect: '/login' }),
-    function(req, res) {
-        res.render('restricted', { user: req.user });
-    }
-);
+// /* GET restricted site. DONT THINK I USE THIS ANYMORE*/
+// router.get(
+//     '/restricted',
+//     passwordless.restricted({ failureRedirect: '/login' }),
+//     function(req, res) {
+//         res.render('restricted', { user: req.user });
+//     }
+// );
 
 /* GET login screen. */
 router.get('/login', function(req, res) {
